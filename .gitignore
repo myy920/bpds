@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### 本地文件 ###
-**/local/**
+**/local
 .mvn
