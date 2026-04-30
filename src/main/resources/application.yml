@@ -13,7 +13,6 @@ spring:
     username: root
     password: Root*123
 
-
     # HikariCP 连接池配置
     hikari:
       # 最小空闲连接数
@@ -55,9 +54,5 @@ spring:
     redis:
       key-prefix:
         ${spring.application.name}:${spring.profiles.active}
-
-
-
-
 
 
