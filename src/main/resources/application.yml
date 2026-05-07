@@ -62,8 +62,3 @@ mybatis:
   configuration:
     map_underscore_to_camel_case: true
 
-mysql:
-  showSQL: false
-  expalin:
-    enable: false
-

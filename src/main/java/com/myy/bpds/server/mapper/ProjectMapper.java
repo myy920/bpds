@@ -1,9 +1,11 @@
 package com.myy.bpds.server.mapper;
 
 import com.myy.bpds.server.entity.ProjectEntity;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface ProjectMapper {
 
     int insert(ProjectEntity project);
