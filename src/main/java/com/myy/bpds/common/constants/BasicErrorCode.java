@@ -6,7 +6,7 @@ import lombok.Getter;
  * 统一响应状态码枚举
  */
 @Getter
-public enum BasicCode implements ResultCode {
+public enum BasicErrorCode implements ErrorCode {
 
     // 成功
     SUCCESS(200, "ok"),
@@ -27,7 +27,7 @@ public enum BasicCode implements ResultCode {
     private final Integer code;
     private final String message;
 
-    BasicCode(Integer code, String message) {
+    BasicErrorCode(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

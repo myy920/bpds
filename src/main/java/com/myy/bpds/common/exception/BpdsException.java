@@ -1,7 +1,7 @@
 package com.myy.bpds.common.exception;
 
-import com.myy.bpds.common.constants.BasicCode;
-import com.myy.bpds.common.constants.ResultCode;
+import com.myy.bpds.common.constants.BasicErrorCode;
+import com.myy.bpds.common.constants.ErrorCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +16,7 @@ public class BpdsException extends RuntimeException {
 
     public BpdsException(String message) {
         super(message);
-        this.code = BasicCode.INTERNAL_SERVER_ERROR.getCode();
+        this.code = BasicErrorCode.INTERNAL_SERVER_ERROR.getCode();
         this.message = message;
     }
 
@@ -26,15 +26,15 @@ public class BpdsException extends RuntimeException {
         this.message = message;
     }
 
-    public BpdsException(ResultCode resultCode) {
-        super(resultCode.getMessage());
-        this.code = resultCode.getCode();
-        this.message = resultCode.getMessage();
+    public BpdsException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.code = errorCode.getCode();
+        this.message = errorCode.getMessage();
     }
 
-    public BpdsException(ResultCode resultCode, String message) {
+    public BpdsException(ErrorCode errorCode, String message) {
         super(message);
-        this.code = resultCode.getCode();
+        this.code = errorCode.getCode();
         this.message = message;
     }
 }

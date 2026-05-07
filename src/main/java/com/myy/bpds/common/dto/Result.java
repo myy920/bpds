@@ -1,7 +1,7 @@
 package com.myy.bpds.common.dto;
 
-import com.myy.bpds.common.constants.BasicCode;
-import com.myy.bpds.common.constants.ResultCode;
+import com.myy.bpds.common.constants.BasicErrorCode;
+import com.myy.bpds.common.constants.ErrorCode;
 import lombok.Data;
 
 /**
@@ -24,35 +24,35 @@ public class Result<T> {
      * 成功响应（无数据）
      */
     public static <T> Result<T> ok() {
-        return new Result<>(BasicCode.SUCCESS.getCode(), BasicCode.SUCCESS.getMessage(), null);
+        return new Result<>(BasicErrorCode.SUCCESS.getCode(), BasicErrorCode.SUCCESS.getMessage(), null);
     }
 
     /**
      * 成功响应（带数据）
      */
     public static <T> Result<T> ok(T data) {
-        return new Result<>(BasicCode.SUCCESS.getCode(), BasicCode.SUCCESS.getMessage(), data);
+        return new Result<>(BasicErrorCode.SUCCESS.getCode(), BasicErrorCode.SUCCESS.getMessage(), data);
     }
 
     /**
      * 成功响应（自定义消息和数据）
      */
     public static <T> Result<T> ok(String message, T data) {
-        return new Result<>(BasicCode.SUCCESS.getCode(), message, data);
+        return new Result<>(BasicErrorCode.SUCCESS.getCode(), message, data);
     }
 
     /**
      * 成功响应（使用状态码枚举）
      */
-    public static <T> Result<T> ok(ResultCode resultCode, T data) {
-        return new Result<>(resultCode.getCode(), resultCode.getMessage(), data);
+    public static <T> Result<T> ok(ErrorCode errorCode, T data) {
+        return new Result<>(errorCode.getCode(), errorCode.getMessage(), data);
     }
 
     /**
      * 失败响应
      */
     public static <T> Result<T> error(String message) {
-        return new Result<>(BasicCode.INTERNAL_SERVER_ERROR.getCode(), message, null);
+        return new Result<>(BasicErrorCode.INTERNAL_SERVER_ERROR.getCode(), message, null);
     }
 
     /**
@@ -65,14 +65,14 @@ public class Result<T> {
     /**
      * 失败响应（使用状态码枚举）
      */
-    public static <T> Result<T> error(ResultCode resultCode) {
-        return new Result<>(resultCode.getCode(), resultCode.getMessage(), null);
+    public static <T> Result<T> error(ErrorCode errorCode) {
+        return new Result<>(errorCode.getCode(), errorCode.getMessage(), null);
     }
 
     /**
      * 失败响应（使用状态码枚举，自定义消息）
      */
-    public static <T> Result<T> error(ResultCode resultCode, String message) {
-        return new Result<>(resultCode.getCode(), message, null);
+    public static <T> Result<T> error(ErrorCode errorCode, String message) {
+        return new Result<>(errorCode.getCode(), message, null);
     }
 }

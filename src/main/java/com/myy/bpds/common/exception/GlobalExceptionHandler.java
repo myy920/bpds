@@ -1,6 +1,6 @@
 package com.myy.bpds.common.exception;
 
-import com.myy.bpds.common.constants.BasicCode;
+import com.myy.bpds.common.constants.BasicErrorCode;
 import com.myy.bpds.common.dto.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
         log.error("参数校验异常: {}", message);
-        return Result.error(BasicCode.BAD_REQUEST, message);
+        return Result.error(BasicErrorCode.BAD_REQUEST, message);
     }
 
     /**
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
         log.error("参数绑定异常: {}", message);
-        return Result.error(BasicCode.BAD_REQUEST, message);
+        return Result.error(BasicErrorCode.BAD_REQUEST, message);
     }
 
     /**
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public Result<Void> handleIllegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
         log.error("非法参数异常: {} - {}", request.getRequestURI(), e.getMessage());
-        return Result.error(BasicCode.BAD_REQUEST, e.getMessage());
+        return Result.error(BasicErrorCode.BAD_REQUEST, e.getMessage());
     }
 
     /**
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NullPointerException.class)
     public Result<Void> handleNullPointerException(NullPointerException e, HttpServletRequest request) {
         log.error("空指针异常: {} - {}", request.getRequestURI(), e.getMessage(), e);
-        return Result.error(BasicCode.INTERNAL_SERVER_ERROR, "系统内部错误");
+        return Result.error(BasicErrorCode.INTERNAL_SERVER_ERROR, "系统内部错误");
     }
 
     /**
@@ -76,7 +76,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public Result<Void> handleRuntimeException(RuntimeException e, HttpServletRequest request) {
         log.error("运行时异常: {} - {}", request.getRequestURI(), e.getMessage(), e);
-        return Result.error(BasicCode.INTERNAL_SERVER_ERROR, "系统内部错误");
+        return Result.error(BasicErrorCode.INTERNAL_SERVER_ERROR, "系统内部错误");
     }
 
     /**
@@ -85,6 +85,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public Result<Void> handleException(Exception e, HttpServletRequest request) {
         log.error("系统异常: {} - {}", request.getRequestURI(), e.getMessage(), e);
-        return Result.error(BasicCode.INTERNAL_SERVER_ERROR, "系统内部错误");
+        return Result.error(BasicErrorCode.INTERNAL_SERVER_ERROR, "系统内部错误");
     }
 }

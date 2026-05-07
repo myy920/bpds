@@ -5,7 +5,7 @@ package com.myy.bpds.common.constants;
 import lombok.Getter;
 
 @Getter
-public enum ProjectCode implements ResultCode {
+public enum ProjectErrorCode implements ErrorCode {
 
     // 项目业务错误码（50101-50199）
     PROJECT_NOT_EXIST(50101, "项目不存在"),
@@ -20,7 +20,7 @@ public enum ProjectCode implements ResultCode {
     private final Integer code;
     private final String message;
 
-    ProjectCode(Integer code, String message) {
+    ProjectErrorCode(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -1,6 +1,6 @@
 package com.myy.bpds.server.service.impl;
 
-import com.myy.bpds.common.constants.ProjectCode;
+import com.myy.bpds.common.constants.ProjectErrorCode;
 import com.myy.bpds.common.exception.BpdsException;
 import com.myy.bpds.server.entity.ProjectEntity;
 import com.myy.bpds.server.mapper.ProjectMapper;
@@ -25,7 +25,7 @@ public class ProjectServiceImpl implements ProjectService {
         // 校验项目名称是否已存在
         List<ProjectEntity> existingProjects = projectMapper.selectByName(project.getName());
         if (!existingProjects.isEmpty()) {
-            throw new BpdsException(ProjectCode.PROJECT_ALREADY_EXIST);
+            throw new BpdsException(ProjectErrorCode.PROJECT_ALREADY_EXIST);
         }
         project.setId(UUID.randomUUID().toString().replace("-", ""));
         project.setCreateTime(LocalDateTime.now());
@@ -46,7 +46,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (!existingProjects.isEmpty()) {
             // 如果查询到的项目不是当前项目，则说明重名
             if (existingProjects.stream().noneMatch(p -> p.getId().equals(project.getId()))) {
-                throw new BpdsException(ProjectCode.PROJECT_ALREADY_EXIST);
+                throw new BpdsException(ProjectErrorCode.PROJECT_ALREADY_EXIST);
             }
         }
 
