@@ -62,3 +62,8 @@ mybatis:
   configuration:
     map_underscore_to_camel_case: true
 
+
+logging:
+  level:
+    com.myy.bpds: debug
+
