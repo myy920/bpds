@@ -11,12 +11,19 @@
     <groupId>com.myy.bpds</groupId>
     <artifactId>bpds</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>bpds</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>common</module>
+        <module>item-service</module>
+        <module>project-service</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
         <mybatis-plus-spring-boot.version>3.5.12</mybatis-plus-spring-boot.version>
         <commons-lang3.version>3.18.0</commons-lang3.version>
         <commons-collections4.version>4.5.0-M2</commons-collections4.version>
@@ -25,6 +32,35 @@
         <httpclient5.version>5.6.1</httpclient5.version>
         <commons-pool2.version>2.12.0</commons-pool2.version>
     </properties>
+
+    <!-- 依赖管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.myy.bpds</groupId>
+                <artifactId>common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.myy.bpds</groupId>
+                <artifactId>project-service</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.myy.bpds</groupId>
+                <artifactId>item-service</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- Spring Boot Web - Web 应用开发支持 -->
         <dependency>
@@ -66,6 +102,12 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>${mybatis-plus-spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
             <version>${mybatis-plus-spring-boot.version}</version>
         </dependency>
 
@@ -129,13 +171,4 @@
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>
