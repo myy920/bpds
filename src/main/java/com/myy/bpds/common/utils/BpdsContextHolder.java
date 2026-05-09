@@ -17,4 +17,8 @@ public class BpdsContextHolder {
     public static void clear() {
         THREAD_LOCAL.remove();
     }
+
+    public static String currentUserId() {
+        return "myy";
+    }
 }

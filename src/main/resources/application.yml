@@ -57,10 +57,19 @@ spring:
       key-prefix:
         ${spring.application.name}:${spring.profiles.active}
 
-mybatis:
+# MyBatis-Plus 配置
+mybatis-plus:
+  # Mapper XML 文件位置
   mapper-locations: classpath:mapper/**/*.xml
+  # 实体类扫描路径
+  type-aliases-package: com.myy.bpds.server.entity
   configuration:
-    map_underscore_to_camel_case: true
+    # 驼峰命名转换
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      # 主键策略：ASSIGN_ID 使用雪花算法
+      id-type: ASSIGN_ID
 
 
 logging:

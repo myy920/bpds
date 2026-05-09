@@ -1,10 +1,11 @@
 package com.myy.bpds.server.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.myy.bpds.server.entity.ProjectEntity;
 
 import java.util.List;
 
-public interface ProjectService {
+public interface ProjectService extends IService<ProjectEntity> {
 
     /**
      * 新增项目

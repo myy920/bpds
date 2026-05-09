@@ -32,9 +32,9 @@ public class BpdsException extends RuntimeException {
         this.message = errorCode.getMessage();
     }
 
-    public BpdsException(ErrorCode errorCode, String message) {
-        super(message);
+    public BpdsException(ErrorCode errorCode, String appendMessage) {
+        super(appendMessage);
         this.code = errorCode.getCode();
-        this.message = message;
+        this.message = String.format("%s: %s", errorCode.getMessage(), appendMessage);
     }
 }

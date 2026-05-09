@@ -4,43 +4,8 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myy.bpds.server.mapper.ProjectMapper">
 
-    <resultMap id="BaseResultMap" type="com.myy.bpds.server.entity.ProjectEntity">
-        <id property="id" column="id" javaType="java.lang.String"/>
-        <result property="name" column="name" javaType="java.lang.String"/>
-        <result property="description" column="description" javaType="java.lang.String"/>
-        <result property="creator" column="creator" javaType="java.lang.String"/>
-        <result property="createTime" column="create_time" javaType="java.time.LocalDateTime"/>
-        <result property="updater" column="updater" javaType="java.lang.String"/>
-        <result property="updateTime" column="update_time" javaType="java.time.LocalDateTime"/>
-    </resultMap>
-
-    <insert id="insert" parameterType="com.myy.bpds.server.entity.ProjectEntity">
-        INSERT INTO t_project (id, name, description, creator, updater)
-        VALUES (#{id}, #{name}, #{description}, #{creator}, #{updater})
-    </insert>
-
-    <delete id="deleteById" parameterType="java.lang.String">
-        DELETE FROM t_project WHERE id = #{id}
-    </delete>
-
-    <update id="update" parameterType="com.myy.bpds.server.entity.ProjectEntity">
-        UPDATE t_project
-        SET name = #{name},
-        description = #{description},
-        updater = #{updater},
-        update_time = CURRENT_TIMESTAMP
-        WHERE id = #{id}
-    </update>
-
-    <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String">
-        SELECT * FROM t_project WHERE id = #{id}
-    </select>
-
-    <select id="selectAll" resultMap="BaseResultMap">
-        SELECT * FROM t_project
-    </select>
-
-    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <!-- 根据名称模糊查询项目 -->
+    <select id="selectByName" resultType="com.myy.bpds.server.entity.ProjectEntity">
         <bind name="pattern" value="'%' + name + '%'"/>
         SELECT * FROM t_project WHERE name LIKE #{pattern}
     </select>
