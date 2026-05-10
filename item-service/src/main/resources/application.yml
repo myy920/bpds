@@ -57,6 +57,12 @@ spring:
       key-prefix:
         ${spring.application.name}:${spring.profiles.active}
 
+  cloud:
+    nacos:
+      server-addr: 192.168.11.130:8848
+      username: nacos
+      password: nacos
+
 # MyBatis-Plus 配置
 mybatis-plus:
   # Mapper XML 文件位置

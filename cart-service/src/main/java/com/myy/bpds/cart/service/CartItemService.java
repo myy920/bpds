@@ -1,6 +1,7 @@
 package com.myy.bpds.cart.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.myy.bpds.cart.dto.CartDTO;
 import com.myy.bpds.cart.dto.CartItemDTO;
 import com.myy.bpds.cart.entity.CartItemEntity;
 
@@ -25,6 +26,11 @@ public interface CartItemService extends IService<CartItemEntity> {
      * 查询用户购物车详情（包含商品信息）
      */
     List<CartItemDTO> getCartDetailsByUserId(String userId);
+    
+    /**
+     * 查询用户完整购物车信息（包含购物车和购物车项列表）
+     */
+    CartDTO getCartByUserId(String userId);
     
     /**
      * 删除购物车项

@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 项目服务接口
  */
-public interface ProjectService extends IService<ProjectEntity> {
+public interface ProjectService {
 
     /**
      * 新增项目

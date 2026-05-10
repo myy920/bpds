@@ -1,5 +1,6 @@
 package com.myy.bpds.cart.controller;
 
+import com.myy.bpds.cart.dto.CartDTO;
 import com.myy.bpds.cart.dto.CartItemDTO;
 import com.myy.bpds.cart.entity.CartItemEntity;
 import com.myy.bpds.cart.service.CartItemService;
@@ -33,53 +34,12 @@ public class CartController {
     }
 
     /**
-     * 从购物车删除商品
+     * 查询用户完整购物车信息（包含购物车和购物车项列表）
      */
-    @DeleteMapping("/{cartItemId}")
-    public Result<Void> removeFromCart(@PathVariable String cartItemId) {
-        cartItemService.removeCartItem(cartItemId);
-        return Result.ok();
-    }
-
-    /**
-     * 更新购物车商品数量
-     */
-    @PutMapping("/quantity")
-    public Result<Void> updateQuantity(
-            @RequestParam String cartItemId,
-            @RequestParam Integer quantity) {
-        cartItemService.updateQuantity(cartItemId, quantity);
-        return Result.ok();
-    }
-
-    /**
-     * 选中/取消选中购物车商品
-     */
-    @PutMapping("/select")
-    public Result<Void> selectCartItem(
-            @RequestParam String cartItemId,
-            @RequestParam Integer selected) {
-        cartItemService.selectCartItem(cartItemId, selected);
-        return Result.ok();
-    }
-
-    /**
-     * 查询用户购物车列表
-     */
-    @GetMapping("/list")
-    public Result<List<CartItemEntity>> getCartList() {
+    @GetMapping("/info")
+    public Result<CartDTO> getCartInfo() {
         String userId = BpdsContextHolder.currentUserId();
-        List<CartItemEntity> cartItems = cartItemService.getCartItemsByUserId(userId);
-        return Result.ok(cartItems);
-    }
-
-    /**
-     * 查询用户购物车详情（包含商品信息）
-     */
-    @GetMapping("/detail")
-    public Result<List<CartItemDTO>> getCartDetail() {
-        String userId = BpdsContextHolder.currentUserId();
-        List<CartItemDTO> cartDetails = cartItemService.getCartDetailsByUserId(userId);
-        return Result.ok(cartDetails);
+        CartDTO cartInfo = cartItemService.getCartByUserId(userId);
+        return Result.ok(cartInfo);
     }
 }

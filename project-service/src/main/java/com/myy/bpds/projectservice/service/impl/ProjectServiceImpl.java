@@ -1,27 +1,29 @@
 package com.myy.bpds.projectservice.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myy.bpds.common.dto.PageQuery;
 import com.myy.bpds.common.dto.PageResult;
 import com.myy.bpds.projectservice.entity.ProjectEntity;
-import com.myy.bpds.projectservice.service.ProjectService;
 import com.myy.bpds.projectservice.mapper.ProjectMapper;
+import com.myy.bpds.projectservice.service.ProjectService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
-* @author Administrator
-* @description 针对表【t_project(项目表)】的数据库操作Service实现
-* @createDate 2026-05-09 21:04:44
-*/
+ * @author Administrator
+ * @description 针对表【t_project(项目表)】的数据库操作Service实现
+ * @createDate 2026-05-09 21:04:44
+ */
 @Service
-public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectEntity>
-    implements ProjectService{
+@RequiredArgsConstructor
+public class ProjectServiceImpl implements ProjectService {
+    private final ProjectMapper projectMapper;
 
     @Override
     public void insert(ProjectEntity project) {
-
+        project.setId(null);
+        projectMapper.insert(project);
     }
 
     @Override
@@ -41,12 +43,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, ProjectEntity
 
     @Override
     public List<ProjectEntity> selectAll() {
-        return List.of();
+        return projectMapper.selectList(null);
     }
 
     @Override
     public PageResult<ProjectEntity> page(PageQuery pageQuery) {
-        return null;
+        return PageResult.of(projectMapper.page(pageQuery.toMpPage(), null));
     }
 
     @Override

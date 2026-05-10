@@ -2,7 +2,9 @@ package com.myy.bpds.cart.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.myy.bpds.cart.client.ItemClient;
 import com.myy.bpds.cart.constants.CartErrorCode;
+import com.myy.bpds.cart.dto.CartDTO;
 import com.myy.bpds.cart.dto.CartItemDTO;
 import com.myy.bpds.cart.entity.CartEntity;
 import com.myy.bpds.cart.entity.CartItemEntity;
@@ -10,12 +12,16 @@ import com.myy.bpds.cart.mapper.CartItemMapper;
 import com.myy.bpds.cart.service.CartItemService;
 import com.myy.bpds.cart.service.CartService;
 import com.myy.bpds.common.exception.BpdsException;
+import com.myy.bpds.itemservice.entity.ItemEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 购物车项Service实现类
@@ -26,6 +32,8 @@ public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEnt
 
     private final CartService cartService;
 
+    private final ItemClient itemClient;
+
     @Override
     @Transactional
     public void addToCart(String userId, String itemId, Integer quantity) {
@@ -33,23 +41,19 @@ public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEnt
         CartEntity cart = cartService.getOrCreateCart(userId);
 
         // 检查购物车中是否已存在该商品
-        LambdaQueryWrapper<CartItemEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(CartItemEntity::getCartId, cart.getId())
-                .eq(CartItemEntity::getItemId, itemId);
-        CartItemEntity existingItem = this.getOne(wrapper);
-
-        if (existingItem != null) {
-            // 如果已存在，增加数量
-            existingItem.setQuantity(existingItem.getQuantity() + quantity);
-            this.updateById(existingItem);
+        CartItemEntity cartItem = this.getOne(
+                new LambdaQueryWrapper<CartItemEntity>().eq(CartItemEntity::getCartId, cart.getId())
+                        .eq(CartItemEntity::getItemId, itemId));
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            updateById(cartItem);
         } else {
-            // 如果不存在，新增购物车项
-            CartItemEntity cartItem = new CartItemEntity();
+            cartItem = new CartItemEntity();
             cartItem.setCartId(cart.getId());
             cartItem.setItemId(itemId);
             cartItem.setQuantity(quantity);
-            cartItem.setSelected(1); // 默认选中
-            this.save(cartItem);
+            cartItem.setSelected(1);
+            save(cartItem);
         }
     }
 
@@ -82,6 +86,35 @@ public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEnt
         }
 
         return result;
+    }
+
+    @Override
+    public CartDTO getCartByUserId(String userId) {
+        // 获取用户购物车
+        CartEntity cart = cartService.getOrCreateCart(userId);
+
+        // 创建 CartDTO
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setCart(cart);
+
+        // 获取购物车项列表并转换为 CartItemDTO
+        List<CartItemEntity> cartItems = getCartItemsByUserId(userId);
+        List<CartItemDTO> itemDTOs = new ArrayList<>();
+
+        List<String> itemIds = cartItems.stream().map(CartItemEntity::getItemId).toList();
+        List<ItemEntity> items = itemClient.getItem(itemIds).getData();
+        Map<String, ItemEntity> itemMap = items.stream()
+                .collect(Collectors.toMap(ItemEntity::getId, Function.identity()));
+
+        for (CartItemEntity cartItem : cartItems) {
+            CartItemDTO itemDTO = new CartItemDTO();
+            itemDTO.setCartItem(cartItem);
+            itemDTO.setItem(itemMap.get(cartItem.getItemId()));
+            itemDTOs.add(itemDTO);
+        }
+        cartDTO.setItems(itemDTOs);
+
+        return cartDTO;
     }
 
     @Override

@@ -8,7 +8,9 @@ import com.myy.bpds.itemservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 商品Controller
@@ -26,6 +28,15 @@ public class ItemController {
     @PostMapping
     public Result<Void> addItem(@RequestBody ItemEntity item) {
         itemService.save(item);
+        return Result.ok();
+    }
+
+    /**
+     * 批量新增商品
+     */
+    @PostMapping("/batch")
+    public Result<Void> addItemsBatch(@RequestBody List<ItemEntity> items) {
+        itemService.saveBatch(items);
         return Result.ok();
     }
 
@@ -67,7 +78,7 @@ public class ItemController {
             @RequestParam(required = false) Integer status) {
         Page<ItemEntity> page = new Page<>(current, size);
         LambdaQueryWrapper<ItemEntity> wrapper = new LambdaQueryWrapper<>();
-        
+
         if (category != null && !category.isEmpty()) {
             wrapper.eq(ItemEntity::getCategory, category);
         }
@@ -75,7 +86,7 @@ public class ItemController {
             wrapper.eq(ItemEntity::getStatus, status);
         }
         wrapper.orderByDesc(ItemEntity::getCreateTime);
-        
+
         Page<ItemEntity> result = itemService.page(page, wrapper);
         return Result.ok(result);
     }
@@ -90,5 +101,14 @@ public class ItemController {
         wrapper.orderByDesc(ItemEntity::getCreateTime);
         List<ItemEntity> items = itemService.list(wrapper);
         return Result.ok(items);
+    }
+
+    public static void main(String[] args) {
+        String s = UUID.randomUUID().toString();
+        System.out.println(s);
+        System.out.println(s.length());
+        Base64.Encoder encoder = Base64.getEncoder();
+        System.out.println(encoder.encodeToString("Root*123ABCRoot*123ABCRoot*123ABC".getBytes()));
+
     }
 }
