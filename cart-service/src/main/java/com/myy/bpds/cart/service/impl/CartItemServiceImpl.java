@@ -1,7 +1,6 @@
 package com.myy.bpds.cart.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myy.bpds.cart.client.ItemClient;
 import com.myy.bpds.cart.constants.CartErrorCode;
 import com.myy.bpds.cart.dto.CartDTO;
@@ -28,10 +27,10 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEntity> implements CartItemService {
+public class CartItemServiceImpl implements CartItemService {
 
     private final CartService cartService;
-
+    private final CartItemMapper cartItemMapper;
     private final ItemClient itemClient;
 
     @Override
@@ -41,19 +40,21 @@ public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEnt
         CartEntity cart = cartService.getOrCreateCart(userId);
 
         // 检查购物车中是否已存在该商品
-        CartItemEntity cartItem = this.getOne(
-                new LambdaQueryWrapper<CartItemEntity>().eq(CartItemEntity::getCartId, cart.getId())
-                        .eq(CartItemEntity::getItemId, itemId));
+        LambdaQueryWrapper<CartItemEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(CartItemEntity::getCartId, cart.getId())
+                .eq(CartItemEntity::getItemId, itemId);
+        CartItemEntity cartItem = cartItemMapper.getOne(wrapper);
+
         if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            updateById(cartItem);
+            cartItemMapper.updateById(cartItem);
         } else {
             cartItem = new CartItemEntity();
             cartItem.setCartId(cart.getId());
             cartItem.setItemId(itemId);
             cartItem.setQuantity(quantity);
             cartItem.setSelected(1);
-            save(cartItem);
+            cartItemMapper.save(cartItem);
         }
     }
 
@@ -67,7 +68,7 @@ public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEnt
         wrapper.eq(CartItemEntity::getCartId, cart.getId())
                 .orderByDesc(CartItemEntity::getCreateTime);
 
-        return this.list(wrapper);
+        return cartItemMapper.list(wrapper);
     }
 
     @Override
@@ -120,30 +121,30 @@ public class CartItemServiceImpl extends ServiceImpl<CartItemMapper, CartItemEnt
     @Override
     @Transactional
     public void removeCartItem(String cartItemId) {
-        this.removeById(cartItemId);
+        cartItemMapper.removeById(cartItemId);
     }
 
     @Override
     @Transactional
     public void updateQuantity(String cartItemId, Integer quantity) {
-        CartItemEntity cartItem = this.getById(cartItemId);
+        CartItemEntity cartItem = cartItemMapper.getById(cartItemId);
         if (cartItem == null) {
             throw new BpdsException(CartErrorCode.CART_ITEM_NOT_EXIST);
         }
 
         cartItem.setQuantity(quantity);
-        this.updateById(cartItem);
+        cartItemMapper.updateById(cartItem);
     }
 
     @Override
     @Transactional
     public void selectCartItem(String cartItemId, Integer selected) {
-        CartItemEntity cartItem = this.getById(cartItemId);
+        CartItemEntity cartItem = cartItemMapper.getById(cartItemId);
         if (cartItem == null) {
             throw new BpdsException(CartErrorCode.CART_ITEM_NOT_EXIST);
         }
 
         cartItem.setSelected(selected);
-        this.updateById(cartItem);
+        cartItemMapper.updateById(cartItem);
     }
 }

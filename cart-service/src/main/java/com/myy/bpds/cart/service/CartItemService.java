@@ -1,6 +1,5 @@
 package com.myy.bpds.cart.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.myy.bpds.cart.dto.CartDTO;
 import com.myy.bpds.cart.dto.CartItemDTO;
 import com.myy.bpds.cart.entity.CartItemEntity;
@@ -10,7 +9,7 @@ import java.util.List;
 /**
  * 购物车项Service
  */
-public interface CartItemService extends IService<CartItemEntity> {
+public interface CartItemService {
     
     /**
      * 添加商品到购物车

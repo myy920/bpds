@@ -1,16 +1,12 @@
 package com.myy.bpds.itemservice.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.myy.bpds.common.dto.Result;
 import com.myy.bpds.itemservice.entity.ItemEntity;
 import com.myy.bpds.itemservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 商品Controller
@@ -66,49 +62,13 @@ public class ItemController {
         ItemEntity item = itemService.getById(id);
         return Result.ok(item);
     }
-
-    /**
-     * 分页查询商品列表
-     */
-    @GetMapping("/page")
-    public Result<Page<ItemEntity>> pageItems(
-            @RequestParam(defaultValue = "1") Integer current,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(required = false) String category,
-            @RequestParam(required = false) Integer status) {
-        Page<ItemEntity> page = new Page<>(current, size);
-        LambdaQueryWrapper<ItemEntity> wrapper = new LambdaQueryWrapper<>();
-
-        if (category != null && !category.isEmpty()) {
-            wrapper.eq(ItemEntity::getCategory, category);
-        }
-        if (status != null) {
-            wrapper.eq(ItemEntity::getStatus, status);
-        }
-        wrapper.orderByDesc(ItemEntity::getCreateTime);
-
-        Page<ItemEntity> result = itemService.page(page, wrapper);
-        return Result.ok(result);
-    }
-
+    
     /**
      * 查询所有上架商品
      */
     @GetMapping("/list")
     public Result<List<ItemEntity>> listItems() {
-        LambdaQueryWrapper<ItemEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ItemEntity::getStatus, 1);
-        wrapper.orderByDesc(ItemEntity::getCreateTime);
-        List<ItemEntity> items = itemService.list(wrapper);
+        List<ItemEntity> items = itemService.listActiveItems();
         return Result.ok(items);
-    }
-
-    public static void main(String[] args) {
-        String s = UUID.randomUUID().toString();
-        System.out.println(s);
-        System.out.println(s.length());
-        Base64.Encoder encoder = Base64.getEncoder();
-        System.out.println(encoder.encodeToString("Root*123ABCRoot*123ABCRoot*123ABC".getBytes()));
-
     }
 }

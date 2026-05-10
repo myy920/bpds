@@ -1,15 +1,11 @@
 package com.myy.bpds.cart.controller;
 
 import com.myy.bpds.cart.dto.CartDTO;
-import com.myy.bpds.cart.dto.CartItemDTO;
-import com.myy.bpds.cart.entity.CartItemEntity;
 import com.myy.bpds.cart.service.CartItemService;
 import com.myy.bpds.common.dto.Result;
 import com.myy.bpds.common.utils.BpdsContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 购物车Controller
