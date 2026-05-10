@@ -5,7 +5,7 @@ import com.myy.bpds.cart.entity.CartItemEntity;
 import com.myy.bpds.cart.service.CartItemService;
 import com.myy.bpds.common.dto.Result;
 import com.myy.bpds.common.utils.BpdsContextHolder;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/cart")
+@RequiredArgsConstructor
 public class CartController {
 
-    @Autowired
-    private CartItemService cartItemService;
+    private final CartItemService cartItemService;
 
     /**
      * 添加商品到购物车
@@ -72,7 +72,7 @@ public class CartController {
         List<CartItemEntity> cartItems = cartItemService.getCartItemsByUserId(userId);
         return Result.ok(cartItems);
     }
-    
+
     /**
      * 查询用户购物车详情（包含商品信息）
      */

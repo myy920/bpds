@@ -5,7 +5,7 @@ import com.myy.bpds.common.dto.PageResult;
 import com.myy.bpds.common.dto.Result;
 import com.myy.bpds.projectservice.entity.ProjectEntity;
 import com.myy.bpds.projectservice.service.ProjectService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,12 +15,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/v1/projects")
+@RequiredArgsConstructor
 public class ProjectController {
 
-
-
-    @Autowired
-    private ProjectService projectService;
+    private final ProjectService projectService;
 
     /**
      * 新增项目
