@@ -77,6 +77,16 @@ mybatis-plus:
       # 主键策略：ASSIGN_ID 使用雪花算法
       id-type: ASSIGN_ID
 
+# Feign 配置
+feign:
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 10000
+
 
 logging:
   level:

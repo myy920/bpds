@@ -197,5 +197,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
+
+        <!-- OpenFeign OkHttp - Feign 使用 OkHttp 作为 HTTP 客户端（性能优于默认 HttpURLConnection） -->
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
     </dependencies>
 </project>

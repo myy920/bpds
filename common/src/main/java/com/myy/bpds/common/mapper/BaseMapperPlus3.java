@@ -1,6 +1,5 @@
 package com.myy.bpds.common.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.AbstractWrapper;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,6 +15,9 @@ import com.baomidou.mybatisplus.extension.kotlin.KtUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import org.apache.ibatis.logging.Log;
+import org.mybatis.logging.Logger;
+import org.mybatis.logging.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
@@ -23,6 +25,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public interface BaseMapperPlus3<T> extends BaseMapper<T> {
+    // 日志
+    Logger log = LoggerFactory.getLogger(BaseMapperPlus3.class);
 
     default boolean saveBatch(Collection<T> entityList) {
         return saveBatch(entityList, 1000);
@@ -49,7 +53,7 @@ public interface BaseMapperPlus3<T> extends BaseMapper<T> {
     }
 
     default T getOne(Wrapper<T> queryWrapper, boolean throwEx) {
-        return Db.getOne((AbstractWrapper<? extends T, ?, ?>) queryWrapper, throwEx);
+        return (T) this.getBaseMapper().selectOne(queryWrapper, throwEx);
     }
 
     default Optional<T> getOneOpt(Wrapper<T> queryWrapper, boolean throwEx) {
@@ -61,7 +65,7 @@ public interface BaseMapperPlus3<T> extends BaseMapper<T> {
     }
 
     default <V> V getObj(Wrapper<T> queryWrapper, Function<? super Object, V> mapper) {
-        return Db.getObj((AbstractWrapper<T, ?, ?>) queryWrapper, mapper::apply);
+        return (V) SqlHelper.getObject((Log) log, this.listObjs(queryWrapper, mapper));
     }
 
     default boolean removeBatchByIds(Collection<?> list) {
@@ -303,6 +307,11 @@ public interface BaseMapperPlus3<T> extends BaseMapper<T> {
     }
 
     default Class<T> getEntityClass() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // 通过反射获取泛型 T 的实际类型
+        java.lang.reflect.Type type = this.getClass().getGenericInterfaces()[0];
+        if (type instanceof java.lang.reflect.ParameterizedType parameterizedType) {
+            return (Class<T>) parameterizedType.getActualTypeArguments()[0];
+        }
+        throw new RuntimeException("无法获取实体类类型");
     }
 }
