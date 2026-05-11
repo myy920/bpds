@@ -33,7 +33,10 @@ spring:
         server-addr: 192.168.11.130:8848
         username: nacos
         password: nacos
-
+    sentinel:
+      transport:
+        dashboard: 192.168.11.130:8858
+      http-method-specify: true
 
 # MyBatis-Plus 配置
 mybatis-plus:

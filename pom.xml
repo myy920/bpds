@@ -126,6 +126,12 @@
             <version>${httpclient5.version}</version>
         </dependency>
 
+        <!-- Spring Boot Starter Validation - 参数校验支持（基于 Hibernate Validator） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
         <!-- Spring Boot Starter Logging - Spring 日志支持（包含 Logback） -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -154,6 +160,12 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-okhttp</artifactId>
+        </dependency>
+
+        <!-- Spring Cloud Alibaba Sentinel - 流量控制、熔断降级 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
         </dependency>
     </dependencies>
 </project>

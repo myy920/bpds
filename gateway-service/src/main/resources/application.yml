@@ -11,17 +11,6 @@ spring:
   profiles:
     active: dev
 
-  cloud:
-    nacos:
-      config:
-        server-addr: 192.168.11.130:8848
-        username: nacos
-        password: nacos
-        file-extension: json
-      discovery:
-        server-addr: 192.168.11.130:8848
-        username: nacos
-        password: nacos
 #    gateway:
 #      server:
 #        webflux:
