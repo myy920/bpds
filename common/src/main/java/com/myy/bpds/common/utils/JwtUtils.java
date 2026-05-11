@@ -49,14 +49,4 @@ public class JwtUtils {
         userInfo.setUsername(claims.get("username", String.class));
         return userInfo;
     }
-
-    public static void main(String[] args) {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId("myy");
-        userInfo.setUsername("梅杨阳");
-        System.out.println(JwtUtils.generateToken(userInfo));
-        // eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJteXkiLCJ1c2VybmFtZSI6IuaiheadqOmYsyIsImlhdCI6MTc3ODQ4NTQ4MiwiZXhwIjoxODM4OTY1NDgyfQ.zxvnYYHDF3t3orQJ7NqQ-po0WubxBleHH3jo-uqxHsw
-    }
-
-
 }

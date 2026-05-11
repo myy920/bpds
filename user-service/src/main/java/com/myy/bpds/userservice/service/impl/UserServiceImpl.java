@@ -54,18 +54,16 @@ public class UserServiceImpl implements UserService {
         String token = JwtUtils.generateToken(userInfo);
 
         // 5. 构建响应
-        return LoginResponse.builder()
-                .token(token)
-                .expiresIn(7 * 24 * 60 * 60 * 1000L)
-                .build();
+        return LoginResponse.builder().token(token).expiresIn(7 * 24 * 60 * 60 * 1000L).build();
     }
 
     @Override
     @Transactional
     public String register(RegisterRequest request) {
         // 1. 检查用户名是否已存在
-        long count = userMapper.count(w -> w.eq(UserEntity::getUsername, request.getUsername()));
-        if (count > 0) {
+        boolean exists = userMapper.exists(
+                w -> w.eq(UserEntity::getUsername, request.getUsername()));
+        if (exists) {
             throw new BpdsException(UserErrorCode.USER_ALREADY_EXISTS);
         }
 
