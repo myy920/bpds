@@ -2,6 +2,7 @@ package com.myy.bpds.userservice.service;
 
 import com.myy.bpds.userservice.dto.LoginRequest;
 import com.myy.bpds.userservice.dto.LoginResponse;
+import com.myy.bpds.userservice.dto.RegisterRequest;
 
 /**
  * 用户服务接口
@@ -19,9 +20,8 @@ public interface UserService {
     /**
      * 用户注册
      *
-     * @param username 用户名
-     * @param password 密码
+     * @param request 注册请求
      * @return 用户ID
      */
-    String register(String username, String password);
+    String register(RegisterRequest request);
 }

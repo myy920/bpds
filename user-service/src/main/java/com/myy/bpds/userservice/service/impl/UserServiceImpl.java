@@ -6,6 +6,7 @@ import com.myy.bpds.common.utils.JwtUtils;
 import com.myy.bpds.userservice.constants.UserErrorCode;
 import com.myy.bpds.userservice.dto.LoginRequest;
 import com.myy.bpds.userservice.dto.LoginResponse;
+import com.myy.bpds.userservice.dto.RegisterRequest;
 import com.myy.bpds.userservice.entity.UserEntity;
 import com.myy.bpds.userservice.mapper.UserMapper;
 import com.myy.bpds.userservice.service.UserService;
@@ -61,17 +62,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String register(String username, String password) {
+    public String register(RegisterRequest request) {
         // 1. 检查用户名是否已存在
-        long count = userMapper.count(w -> w.eq(UserEntity::getUsername, username));
+        long count = userMapper.count(w -> w.eq(UserEntity::getUsername, request.getUsername()));
         if (count > 0) {
             throw new BpdsException(UserErrorCode.USER_ALREADY_EXISTS);
         }
 
         // 2. 创建新用户
         UserEntity user = new UserEntity();
-        user.setUsername(username);
-        user.setPassword(encryptPassword(password));
+        user.setUsername(request.getUsername());
+        user.setPassword(encryptPassword(request.getPassword()));
         user.setStatus(1); // 正常状态
 
         userMapper.save(user);
