@@ -1,9 +1,11 @@
 package com.myy.bpds.common.exception;
 
 import com.myy.bpds.common.constants.BasicErrorCode;
+import com.myy.bpds.common.config.CommonEnableConfig;
 import com.myy.bpds.common.dto.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestControllerAdvice
+@ConditionalOnBean(CommonEnableConfig.class)
 public class GlobalExceptionHandler {
 
     /**

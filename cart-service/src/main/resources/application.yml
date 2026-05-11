@@ -4,7 +4,7 @@ server:
     context-path: /${spring.application.name}
 spring:
   application:
-    name: bpds-cart
+    name: cart-service
 
   profiles:
     active: dev
@@ -86,7 +86,6 @@ feign:
         connectTimeout: 5000      # 连接超时（毫秒）
         readTimeout: 10000          # 读取超时（毫秒）
         followRedirects: true       # 是否跟随重定向
-        loggerLevel: full           # 日志级别：none/basic/headers/full
 
 
 logging:

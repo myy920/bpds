@@ -1,0 +1,144 @@
+package com.myy.bpds.cartservice.service.impl;
+
+import com.myy.bpds.cartservice.client.ItemClient;
+import com.myy.bpds.cartservice.constants.CartErrorCode;
+import com.myy.bpds.cartservice.dto.CartDTO;
+import com.myy.bpds.cartservice.dto.CartItemDTO;
+import com.myy.bpds.cartservice.entity.CartEntity;
+import com.myy.bpds.cartservice.entity.CartItemEntity;
+import com.myy.bpds.cartservice.mapper.CartItemMapper;
+import com.myy.bpds.cartservice.service.CartItemService;
+import com.myy.bpds.cartservice.service.CartService;
+import com.myy.bpds.common.exception.BpdsException;
+import com.myy.bpds.itemservice.entity.ItemEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+/**
+ * 购物车项Service实现类
+ */
+@Service
+@RequiredArgsConstructor
+public class CartItemServiceImpl implements CartItemService {
+
+    private final CartService cartService;
+    private final CartItemMapper cartItemMapper;
+    private final ItemClient itemClient;
+
+    @Override
+    @Transactional
+    public void addToCart(String userId, String itemId, Integer quantity) {
+        // 获取或创建购物车
+        CartEntity cart = cartService.getOrCreateCart(userId);
+
+        // 检查购物车中是否已存在该商品
+        CartItemEntity cartItem = cartItemMapper.getOne(
+                ew -> ew.eq(CartItemEntity::getCartId, cart.getId()).eq(CartItemEntity::getItemId, itemId));
+
+        if (cartItem != null) {
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
+            cartItemMapper.updateById(cartItem);
+        } else {
+            cartItem = new CartItemEntity();
+            cartItem.setCartId(cart.getId());
+            cartItem.setItemId(itemId);
+            cartItem.setQuantity(quantity);
+            cartItem.setSelected(1);
+            cartItemMapper.save(cartItem);
+        }
+    }
+
+    @Override
+    public List<CartItemEntity> getCartItemsByUserId(String userId) {
+        // 获取用户购物车
+        CartEntity cart = cartService.getOrCreateCart(userId);
+
+        // 查询购物车项列表
+        return cartItemMapper.list(ew ->
+                ew.eq(CartItemEntity::getCartId, cart.getId()).orderByDesc(CartItemEntity::getCreateTime));
+    }
+
+    @Override
+    public List<CartItemDTO> getCartDetailsByUserId(String userId) {
+        // 获取购物车项列表
+        List<CartItemEntity> cartItems = getCartItemsByUserId(userId);
+
+        // TODO: 这里需要调用 item-service 获取商品信息
+        // 目前返回简单的 DTO，后续可以通过 Feign 或 RestTemplate 调用 item-service
+        List<CartItemDTO> result = new ArrayList<>();
+        for (CartItemEntity cartItem : cartItems) {
+            CartItemDTO dto = new CartItemDTO();
+            dto.setCartItem(cartItem);
+            // dto.setItem(itemService.getById(cartItem.getItemId())); // 需要注入 ItemService
+            result.add(dto);
+        }
+
+        return result;
+    }
+
+    @Override
+    public CartDTO getCartByUserId(String userId) {
+        // 获取用户购物车
+        CartEntity cart = cartService.getOrCreateCart(userId);
+
+        // 创建 CartDTO
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setCart(cart);
+
+        // 获取购物车项列表并转换为 CartItemDTO
+        List<CartItemEntity> cartItems = getCartItemsByUserId(userId);
+        List<CartItemDTO> itemDTOs = new ArrayList<>();
+
+        List<String> itemIds = cartItems.stream().map(CartItemEntity::getItemId).toList();
+        List<ItemEntity> items = itemClient.getItem(itemIds).getData();
+        Map<String, ItemEntity> itemMap = items.stream()
+                .collect(Collectors.toMap(ItemEntity::getId, Function.identity()));
+
+        for (CartItemEntity cartItem : cartItems) {
+            CartItemDTO itemDTO = new CartItemDTO();
+            itemDTO.setCartItem(cartItem);
+            itemDTO.setItem(itemMap.get(cartItem.getItemId()));
+            itemDTOs.add(itemDTO);
+        }
+        cartDTO.setItems(itemDTOs);
+
+        return cartDTO;
+    }
+
+    @Override
+    @Transactional
+    public void removeCartItem(String cartItemId) {
+        cartItemMapper.removeById(cartItemId);
+    }
+
+    @Override
+    @Transactional
+    public void updateQuantity(String cartItemId, Integer quantity) {
+        CartItemEntity cartItem = cartItemMapper.getById(cartItemId);
+        if (cartItem == null) {
+            throw new BpdsException(CartErrorCode.CART_ITEM_NOT_EXIST);
+        }
+
+        cartItem.setQuantity(quantity);
+        cartItemMapper.updateById(cartItem);
+    }
+
+    @Override
+    @Transactional
+    public void selectCartItem(String cartItemId, Integer selected) {
+        CartItemEntity cartItem = cartItemMapper.getById(cartItemId);
+        if (cartItem == null) {
+            throw new BpdsException(CartErrorCode.CART_ITEM_NOT_EXIST);
+        }
+
+        cartItem.setSelected(selected);
+        cartItemMapper.updateById(cartItem);
+    }
+}

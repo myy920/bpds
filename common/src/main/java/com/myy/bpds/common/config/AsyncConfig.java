@@ -2,6 +2,7 @@ package com.myy.bpds.common.config;
 
 import com.myy.bpds.common.dto.BpdsContext;
 import com.myy.bpds.common.utils.BpdsContextHolder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskDecorator;
@@ -11,6 +12,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 @Configuration
+@ConditionalOnBean(CommonEnableConfig.class)
 @EnableAsync
 public class AsyncConfig {
     public static final String DEFAULT = "ASYNC_DEFAULT";

@@ -1,11 +1,13 @@
 package com.myy.bpds.common.aspect;
 
+import com.myy.bpds.common.config.CommonEnableConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -16,6 +18,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 @Aspect
 @Component
+@ConditionalOnBean(CommonEnableConfig.class)
 public class RequestAspect {
     /**
      * 定义切点：拦截所有标注了 @RestController 或 @Controller 的类中的方法

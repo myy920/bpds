@@ -1,0 +1,54 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  application:
+    name: gateway-service
+  main:
+    web-application-type: reactive
+
+  profiles:
+    active: dev
+
+  cloud:
+    nacos:
+      server-addr: 192.168.11.130:8848
+      username: nacos
+      password: nacos
+    gateway:
+      server:
+        webflux:
+          # 全局默认过滤器
+          default-filters:
+            - StripPrefix=1
+          routes:
+            - id: user-service
+              uri: lb://user-service
+              predicates:
+                - Path=/gateway-service/user/**
+              filters:
+                - PrefixPath=/user-service
+            - id: cart-service
+              uri: lb://cart-service
+              predicates:
+                - Path=/gateway-service/cart/**
+              filters:
+                - PrefixPath=/cart-service
+            - id: item-service
+              uri: lb://item-service
+              predicates:
+                - Path=/gateway-service/item/**
+              filters:
+                - PrefixPath=/item-service
+            - id: project-service
+              uri: lb://project-service
+              predicates:
+                - Path=/gateway-service/project/**
+              filters:
+                - PrefixPath=/project-service
+
+logging:
+  level:
+    com.myy.bpds: debug
+

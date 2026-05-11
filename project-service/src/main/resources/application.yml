@@ -1,10 +1,10 @@
 server:
-  port: 8000
+  port: 8003
   servlet:
     context-path: /${spring.application.name}
 spring:
   application:
-    name: bpds-project
+    name: project-service
 
   profiles:
     active: dev
@@ -77,6 +77,15 @@ mybatis-plus:
       # 主键策略：ASSIGN_ID 使用雪花算法
       id-type: ASSIGN_ID
 
+feign:
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000      # 连接超时（毫秒）
+        readTimeout: 10000          # 读取超时（毫秒）
+        followRedirects: true       # 是否跟随重定向
 
 logging:
   level:

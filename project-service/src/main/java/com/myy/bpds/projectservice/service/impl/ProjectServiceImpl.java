@@ -48,7 +48,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public PageResult<ProjectEntity> page(PageQuery pageQuery) {
-        return PageResult.of(projectMapper.page(pageQuery.toMpPage(), null));
+        return PageResult.of(projectMapper.page(pageQuery.toMpPage(), ew -> {}));
     }
 
     @Override

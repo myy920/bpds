@@ -14,7 +14,7 @@ import java.util.List;
  * 项目管理 Controller
  */
 @RestController
-@RequestMapping("/v1/projects")
+@RequestMapping("/project")
 @RequiredArgsConstructor
 public class ProjectController {
 

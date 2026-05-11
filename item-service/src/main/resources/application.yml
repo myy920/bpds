@@ -4,7 +4,7 @@ server:
     context-path: /${spring.application.name}
 spring:
   application:
-    name: bpds-item
+    name: item-service
 
   profiles:
     active: dev
@@ -84,8 +84,9 @@ feign:
   client:
     config:
       default:
-        connectTimeout: 5000
-        readTimeout: 10000
+        connectTimeout: 5000      # 连接超时（毫秒）
+        readTimeout: 10000          # 读取超时（毫秒）
+        followRedirects: true       # 是否跟随重定向
 
 
 logging:

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.myy.bpds.common.utils.BpdsContextHolder;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
  * MyBatis-Plus 配置类
  */
 @Configuration
+@ConditionalOnBean(CommonEnableConfig.class)
 public class MyBatisPlusConfig {
 
     /**
