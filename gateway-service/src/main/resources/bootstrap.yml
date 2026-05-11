@@ -1,0 +1,16 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  application:
+    name: gateway-service
+  main:
+    web-application-type: reactive
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 192.168.11.130:8848
+      username: nacos
+      password: nacos

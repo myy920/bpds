@@ -1,0 +1,106 @@
+[
+  {
+    "id": "user-service",
+    "uri": "lb://user-service",
+    "predicates": [
+      {
+        "name": "Path",
+        "args": {
+          "pattern": "/gateway-service/user/**"
+        }
+      }
+    ],
+    "filters": [
+      {
+        "name": "StripPrefix",
+        "args": {
+          "parts": "1"
+        }
+      },
+      {
+        "name": "PrefixPath",
+        "args": {
+          "prefix": "/user-service"
+        }
+      }
+    ]
+  },
+  {
+    "id": "cart-service",
+    "uri": "lb://cart-service",
+    "predicates": [
+      {
+        "name": "Path",
+        "args": {
+          "pattern": "/gateway-service/cart/**"
+        }
+      }
+    ],
+    "filters": [
+      {
+        "name": "StripPrefix",
+        "args": {
+          "parts": "1"
+        }
+      },
+      {
+        "name": "PrefixPath",
+        "args": {
+          "prefix": "/cart-service"
+        }
+      }
+    ]
+  },
+  {
+    "id": "item-service",
+    "uri": "lb://item-service",
+    "predicates": [
+      {
+        "name": "Path",
+        "args": {
+          "pattern": "/gateway-service/item/**"
+        }
+      }
+    ],
+    "filters": [
+      {
+        "name": "StripPrefix",
+        "args": {
+          "parts": "1"
+        }
+      },
+      {
+        "name": "PrefixPath",
+        "args": {
+          "prefix": "/item-service"
+        }
+      }
+    ]
+  },
+  {
+    "id": "project-service",
+    "uri": "lb://project-service",
+    "predicates": [
+      {
+        "name": "Path",
+        "args": {
+          "pattern": "/gateway-service/project/**"
+        }
+      }
+    ],
+    "filters": [
+      {
+        "name": "StripPrefix",
+        "args": {
+          "parts": "1"
+        }
+      },
+      {
+        "name": "PrefixPath",
+        "args": {
+          "prefix": "/project-service"
+        }
+      }
+    ]
+  }
+]
