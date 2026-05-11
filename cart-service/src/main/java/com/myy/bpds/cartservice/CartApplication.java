@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.myy.bpds.cartservice.mapper")
+@MapperScan(basePackages = "com.myy.bpds.cartservice.dao")
 @EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
 public class CartApplication {
 

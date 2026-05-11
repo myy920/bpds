@@ -13,7 +13,7 @@ public class CartItemDTO {
      * 购物车项信息
      */
     private CartItemEntity cartItem;
-    
+
     /**
      * 商品信息
      */

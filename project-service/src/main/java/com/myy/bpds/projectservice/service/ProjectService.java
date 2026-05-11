@@ -1,7 +1,5 @@
 package com.myy.bpds.projectservice.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.myy.bpds.common.dto.PageQuery;
 import com.myy.bpds.common.dto.PageResult;
 import com.myy.bpds.projectservice.entity.ProjectEntity;

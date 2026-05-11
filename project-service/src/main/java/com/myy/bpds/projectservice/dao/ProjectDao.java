@@ -1,4 +1,4 @@
-package com.myy.bpds.projectservice.mapper;
+package com.myy.bpds.projectservice.dao;
 
 import com.myy.bpds.common.mapper.LambdaBaseMapper;
 import com.myy.bpds.projectservice.entity.ProjectEntity;
@@ -9,7 +9,7 @@ import com.myy.bpds.projectservice.entity.ProjectEntity;
  * @createDate 2026-05-09 21:04:44
  * @Entity com.myy.bpds.projectservice.entity.ProjectEntity
  */
-public interface ProjectMapper extends LambdaBaseMapper<ProjectEntity> {
+public interface ProjectDao extends LambdaBaseMapper<ProjectEntity> {
 
 }
 

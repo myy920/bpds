@@ -2,8 +2,8 @@ package com.myy.bpds.itemservice.service.impl;
 
 import com.myy.bpds.common.exception.BpdsException;
 import com.myy.bpds.itemservice.constants.ItemErrorCode;
+import com.myy.bpds.itemservice.dao.ItemDao;
 import com.myy.bpds.itemservice.entity.ItemEntity;
-import com.myy.bpds.itemservice.mapper.ItemMapper;
 import com.myy.bpds.itemservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private final ItemMapper itemMapper;
+    private final ItemDao itemDao;
 
     @Override
     public void save(ItemEntity item) {
@@ -27,12 +27,12 @@ public class ItemServiceImpl implements ItemService {
         if (StringUtils.hasText(item.getName())) {
             validateNameDuplicate(item.getName());
         }
-        itemMapper.save(item);
+        itemDao.save(item);
     }
 
     @Override
     public void validateNameDuplicate(String name) {
-        Long count = itemMapper.selectCount(w -> w.eq(ItemEntity::getName, name));
+        Long count = itemDao.selectCount(w -> w.eq(ItemEntity::getName, name));
         if (count > 0) {
             throw new BpdsException(ItemErrorCode.ITEM_NAME_DUPLICATE);
         }
@@ -40,12 +40,12 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void saveBatch(List<ItemEntity> items) {
-        itemMapper.saveBatch(items);
+        itemDao.saveBatch(items);
     }
 
     @Override
     public void removeById(Serializable id) {
-        itemMapper.removeById(id);
+        itemDao.removeById(id);
     }
 
     @Override
@@ -54,12 +54,12 @@ public class ItemServiceImpl implements ItemService {
         if (StringUtils.hasText(item.getName()) && StringUtils.hasText(item.getId())) {
             validateNameDuplicateForUpdate(item.getName(), item.getId());
         }
-        itemMapper.updateById(item);
+        itemDao.updateById(item);
     }
 
     @Override
     public void validateNameDuplicateForUpdate(String name, String excludeId) {
-        boolean exists = itemMapper.exists(w -> w.eq(ItemEntity::getName, name).ne(ItemEntity::getId, excludeId));
+        boolean exists = itemDao.exists(w -> w.eq(ItemEntity::getName, name).ne(ItemEntity::getId, excludeId));
         if (exists) {
             throw new BpdsException(ItemErrorCode.ITEM_NAME_DUPLICATE);
         }
@@ -67,17 +67,17 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemEntity getById(Serializable id) {
-        return itemMapper.getById(id);
+        return itemDao.getById(id);
     }
 
 
     @Override
     public List<ItemEntity> listActiveItems() {
-        return itemMapper.list(w -> w.eq(ItemEntity::getStatus, 1).orderByDesc(ItemEntity::getCreateTime));
+        return itemDao.list(w -> w.eq(ItemEntity::getStatus, 1).orderByDesc(ItemEntity::getCreateTime));
     }
 
     @Override
     public List<ItemEntity> listByIds(List<String> ids) {
-        return itemMapper.listByIds(ids);
+        return itemDao.listByIds(ids);
     }
 }

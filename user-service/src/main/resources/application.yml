@@ -34,6 +34,31 @@ spring:
         username: nacos
         password: nacos
 
+
+# MyBatis-Plus 配置
+mybatis-plus:
+  # Mapper XML 文件位置
+  mapper-locations: classpath:dao/**/*.xml
+  # 实体类扫描路径
+  type-aliases-package: com.myy.bpds.userservice.entity
+  configuration:
+    # 驼峰命名转换
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      # 主键策略：ASSIGN_ID 使用雪花算法
+      id-type: ASSIGN_ID
+
+feign:
+  okhttp:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000      # 连接超时（毫秒）
+        readTimeout: 10000          # 读取超时（毫秒）
+        followRedirects: true       # 是否跟随重定向
+
 logging:
   level:
     com.myy.bpds: debug

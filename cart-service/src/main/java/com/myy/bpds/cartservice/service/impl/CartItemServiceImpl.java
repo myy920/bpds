@@ -2,11 +2,11 @@ package com.myy.bpds.cartservice.service.impl;
 
 import com.myy.bpds.cartservice.client.ItemClient;
 import com.myy.bpds.cartservice.constants.CartErrorCode;
+import com.myy.bpds.cartservice.dao.CartItemDao;
 import com.myy.bpds.cartservice.dto.CartDTO;
 import com.myy.bpds.cartservice.dto.CartItemDTO;
 import com.myy.bpds.cartservice.entity.CartEntity;
 import com.myy.bpds.cartservice.entity.CartItemEntity;
-import com.myy.bpds.cartservice.mapper.CartItemMapper;
 import com.myy.bpds.cartservice.service.CartItemService;
 import com.myy.bpds.cartservice.service.CartService;
 import com.myy.bpds.common.exception.BpdsException;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartService cartService;
-    private final CartItemMapper cartItemMapper;
+    private final CartItemDao cartItemDao;
     private final ItemClient itemClient;
 
     @Override
@@ -39,19 +39,19 @@ public class CartItemServiceImpl implements CartItemService {
         CartEntity cart = cartService.getOrCreateCart(userId);
 
         // 检查购物车中是否已存在该商品
-        CartItemEntity cartItem = cartItemMapper.getOne(
+        CartItemEntity cartItem = cartItemDao.getOne(
                 ew -> ew.eq(CartItemEntity::getCartId, cart.getId()).eq(CartItemEntity::getItemId, itemId));
 
         if (cartItem != null) {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
-            cartItemMapper.updateById(cartItem);
+            cartItemDao.updateById(cartItem);
         } else {
             cartItem = new CartItemEntity();
             cartItem.setCartId(cart.getId());
             cartItem.setItemId(itemId);
             cartItem.setQuantity(quantity);
             cartItem.setSelected(1);
-            cartItemMapper.save(cartItem);
+            cartItemDao.save(cartItem);
         }
     }
 
@@ -61,7 +61,7 @@ public class CartItemServiceImpl implements CartItemService {
         CartEntity cart = cartService.getOrCreateCart(userId);
 
         // 查询购物车项列表
-        return cartItemMapper.list(ew ->
+        return cartItemDao.list(ew ->
                 ew.eq(CartItemEntity::getCartId, cart.getId()).orderByDesc(CartItemEntity::getCreateTime));
     }
 
@@ -115,30 +115,30 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @Transactional
     public void removeCartItem(String cartItemId) {
-        cartItemMapper.removeById(cartItemId);
+        cartItemDao.removeById(cartItemId);
     }
 
     @Override
     @Transactional
     public void updateQuantity(String cartItemId, Integer quantity) {
-        CartItemEntity cartItem = cartItemMapper.getById(cartItemId);
+        CartItemEntity cartItem = cartItemDao.getById(cartItemId);
         if (cartItem == null) {
             throw new BpdsException(CartErrorCode.CART_ITEM_NOT_EXIST);
         }
 
         cartItem.setQuantity(quantity);
-        cartItemMapper.updateById(cartItem);
+        cartItemDao.updateById(cartItem);
     }
 
     @Override
     @Transactional
     public void selectCartItem(String cartItemId, Integer selected) {
-        CartItemEntity cartItem = cartItemMapper.getById(cartItemId);
+        CartItemEntity cartItem = cartItemDao.getById(cartItemId);
         if (cartItem == null) {
             throw new BpdsException(CartErrorCode.CART_ITEM_NOT_EXIST);
         }
 
         cartItem.setSelected(selected);
-        cartItemMapper.updateById(cartItem);
+        cartItemDao.updateById(cartItem);
     }
 }

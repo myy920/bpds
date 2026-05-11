@@ -2,8 +2,8 @@ package com.myy.bpds.projectservice.service.impl;
 
 import com.myy.bpds.common.dto.PageQuery;
 import com.myy.bpds.common.dto.PageResult;
+import com.myy.bpds.projectservice.dao.ProjectDao;
 import com.myy.bpds.projectservice.entity.ProjectEntity;
-import com.myy.bpds.projectservice.mapper.ProjectMapper;
 import com.myy.bpds.projectservice.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
-    private final ProjectMapper projectMapper;
+    private final ProjectDao projectDao;
 
     @Override
     public void insert(ProjectEntity project) {
         project.setId(null);
-        projectMapper.insert(project);
+        projectDao.insert(project);
     }
 
     @Override
@@ -43,13 +43,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectEntity> selectAll() {
-        return projectMapper.selectList(ew -> {
+        return projectDao.selectList(ew -> {
         });
     }
 
     @Override
     public PageResult<ProjectEntity> page(PageQuery pageQuery) {
-        return PageResult.of(projectMapper.page(pageQuery.toMpPage(), ew -> {
+        return PageResult.of(projectDao.page(pageQuery.toMpPage(), ew -> {
         }));
     }
 

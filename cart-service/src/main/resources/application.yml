@@ -66,9 +66,9 @@ spring:
 # MyBatis-Plus 配置
 mybatis-plus:
   # Mapper XML 文件位置
-  mapper-locations: classpath:mapper/**/*.xml
+  mapper-locations: classpath:dao/**/*.xml
   # 实体类扫描路径
-  type-aliases-package: com.myy.bpds.itemservice.entity
+  type-aliases-package: com.myy.bpds.cartservice.entity
   configuration:
     # 驼峰命名转换
     map-underscore-to-camel-case: true

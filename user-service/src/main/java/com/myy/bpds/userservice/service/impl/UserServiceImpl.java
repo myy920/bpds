@@ -4,11 +4,11 @@ import com.myy.bpds.common.dto.UserInfo;
 import com.myy.bpds.common.exception.BpdsException;
 import com.myy.bpds.common.utils.JwtUtils;
 import com.myy.bpds.userservice.constants.UserErrorCode;
+import com.myy.bpds.userservice.dao.UserDao;
 import com.myy.bpds.userservice.dto.LoginRequest;
 import com.myy.bpds.userservice.dto.LoginResponse;
 import com.myy.bpds.userservice.dto.RegisterRequest;
 import com.myy.bpds.userservice.entity.UserEntity;
-import com.myy.bpds.userservice.mapper.UserMapper;
 import com.myy.bpds.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +25,7 @@ import java.nio.charset.StandardCharsets;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
+    private final UserDao userDao;
 
     @Override
     public LoginResponse login(LoginRequest request) {
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
             throw new BpdsException(UserErrorCode.USERNAME_OR_PASSWORD_EMPTY);
         }
         // 1. 查询用户
-        UserEntity user = userMapper.getOne(w -> w.eq(UserEntity::getUsername, request.getUsername()));
+        UserEntity user = userDao.getOne(w -> w.eq(UserEntity::getUsername, request.getUsername()));
         if (user == null) {
             throw new BpdsException(UserErrorCode.USER_NOT_FOUND);
         }
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public String register(RegisterRequest request) {
         // 1. 检查用户名是否已存在
-        boolean exists = userMapper.exists(
+        boolean exists = userDao.exists(
                 w -> w.eq(UserEntity::getUsername, request.getUsername()));
         if (exists) {
             throw new BpdsException(UserErrorCode.USER_ALREADY_EXISTS);
@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encryptPassword(request.getPassword()));
         user.setStatus(1); // 正常状态
 
-        userMapper.save(user);
+        userDao.save(user);
 
         return user.getId();
     }

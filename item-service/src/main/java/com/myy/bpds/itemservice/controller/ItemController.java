@@ -62,7 +62,7 @@ public class ItemController {
         ItemEntity item = itemService.getById(id);
         return Result.ok(item);
     }
-    
+
     /**
      * 查询所有上架商品
      */

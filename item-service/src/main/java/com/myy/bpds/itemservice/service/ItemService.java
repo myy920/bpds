@@ -1,6 +1,5 @@
 package com.myy.bpds.itemservice.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.myy.bpds.itemservice.entity.ItemEntity;
 
 import java.io.Serializable;

@@ -227,7 +227,8 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
     /**
      * 分页查询 Map 列表（BaseMapper 原始方法名）
      */
-    default <E extends IPage<Map<String, Object>>> E selectMapsPage(E page, Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+    default <E extends IPage<Map<String, Object>>> E selectMapsPage(E page,
+                                                                    Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
         return pageMaps(page, wrapperSetting);
     }
 

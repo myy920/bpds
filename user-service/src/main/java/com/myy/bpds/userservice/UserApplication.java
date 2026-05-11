@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
-@MapperScan(basePackages = "com.myy.bpds.userservice.mapper")
+@MapperScan(basePackages = "com.myy.bpds.userservice.dao")
 @EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
 public class UserApplication {
 

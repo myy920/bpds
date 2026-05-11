@@ -127,7 +127,6 @@ public interface MybatisPlus3IServiceAdapter<T> extends BaseMapper<T> {
     }
 
 
-
     default T getById(Serializable id) {
         return (T) this.getBaseMapper().selectById(id);
     }

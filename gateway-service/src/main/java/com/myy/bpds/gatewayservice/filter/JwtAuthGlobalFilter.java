@@ -67,10 +67,10 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
 
 
         // 4. 将用户信息传递到下游服务
-        String userInfoJson = String.format("{\"userId\":\"%s\",\"username\":\"%s\"}", 
+        String userInfoJson = String.format("{\"userId\":\"%s\",\"username\":\"%s\"}",
                 userInfo.getUserId(), userInfo.getUsername());
         log.debug("用户认证成功: userId={}", userInfo.getUserId());
-        
+
         // 将用户信息添加到请求头
         ServerWebExchange swe = exchange.mutate()
                 .request(builder -> builder
