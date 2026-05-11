@@ -16,6 +16,11 @@ public interface ItemService {
     void save(ItemEntity item);
 
     /**
+     * 校验商品名称是否重复（新增时）
+     */
+    void validateNameDuplicate(String name);
+
+    /**
      * 批量新增商品
      */
     void saveBatch(List<ItemEntity> items);
@@ -31,14 +36,14 @@ public interface ItemService {
     void updateById(ItemEntity item);
 
     /**
+     * 校验商品名称是否重复（更新时，排除自身）
+     */
+    void validateNameDuplicateForUpdate(String name, String excludeId);
+
+    /**
      * 查询商品详情
      */
     ItemEntity getById(Serializable id);
-
-    /**
-     * 查询商品列表
-     */
-    List<ItemEntity> list(LambdaQueryWrapper<ItemEntity> wrapper);
 
     /**
      * 查询所有上架商品

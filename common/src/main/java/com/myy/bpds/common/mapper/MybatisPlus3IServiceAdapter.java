@@ -113,16 +113,6 @@ public interface MybatisPlus3IServiceAdapter<T> extends BaseMapper<T> {
     }
 
 
-    default int updateById(T entity) {
-        return this.getBaseMapper().updateById(entity);
-    }
-
-
-    default int update(Wrapper<T> updateWrapper) {
-        return update(null, updateWrapper);
-    }
-
-
     default boolean tryUpdate(T entity, Wrapper<T> updateWrapper) {
         return SqlHelper.retBool(this.getBaseMapper().update(entity, updateWrapper));
     }
@@ -136,10 +126,6 @@ public interface MybatisPlus3IServiceAdapter<T> extends BaseMapper<T> {
         return SqlHelper.retBool(update(null, updateWrapper));
     }
 
-
-    default int update(T entity, Wrapper<T> updateWrapper) {
-        return this.getBaseMapper().update(entity, updateWrapper);
-    }
 
 
     default T getById(Serializable id) {
@@ -170,12 +156,6 @@ public interface MybatisPlus3IServiceAdapter<T> extends BaseMapper<T> {
     default Optional<T> getOneOpt(Wrapper<T> queryWrapper) {
         return this.getOneOpt(queryWrapper, true);
     }
-
-
-    default boolean exists(Wrapper<T> queryWrapper) {
-        return this.getBaseMapper().exists(queryWrapper);
-    }
-
 
     default long count() {
         return this.count(Wrappers.emptyWrapper());

@@ -27,7 +27,12 @@ public class BpdsContextHolder {
         BpdsContext bpdsContext = get();
         UserInfo userInfo = bpdsContext.getUserInfo();
         String userId = userInfo == null ? null : userInfo.getUserId();
-        userId = userId == null ? "System" : userId;
+        userId = userId == null ? "myy" : userId;
         return userId;
+    }
+
+    public static UserInfo currentUserInfo() {
+        BpdsContext bpdsContext = get();
+        return bpdsContext.getUserInfo();
     }
 }

@@ -1,11 +1,13 @@
 package com.myy.bpds.itemservice.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.myy.bpds.common.exception.BpdsException;
+import com.myy.bpds.itemservice.constants.ItemErrorCode;
 import com.myy.bpds.itemservice.entity.ItemEntity;
 import com.myy.bpds.itemservice.mapper.ItemMapper;
 import com.myy.bpds.itemservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,7 +23,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void save(ItemEntity item) {
+        // 校验商品名称是否重复
+        if (StringUtils.hasText(item.getName())) {
+            validateNameDuplicate(item.getName());
+        }
         itemMapper.save(item);
+    }
+
+    @Override
+    public void validateNameDuplicate(String name) {
+        Long count = itemMapper.selectCount(w -> w.eq(ItemEntity::getName, name));
+        if (count > 0) {
+            throw new BpdsException(ItemErrorCode.ITEM_NAME_DUPLICATE);
+        }
     }
 
     @Override
@@ -36,7 +50,19 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void updateById(ItemEntity item) {
+        // 校验商品名称是否重复（排除自身）
+        if (StringUtils.hasText(item.getName()) && StringUtils.hasText(item.getId())) {
+            validateNameDuplicateForUpdate(item.getName(), item.getId());
+        }
         itemMapper.updateById(item);
+    }
+
+    @Override
+    public void validateNameDuplicateForUpdate(String name, String excludeId) {
+        boolean exists = itemMapper.exists(w -> w.eq(ItemEntity::getName, name).ne(ItemEntity::getId, excludeId));
+        if (exists) {
+            throw new BpdsException(ItemErrorCode.ITEM_NAME_DUPLICATE);
+        }
     }
 
     @Override
@@ -44,17 +70,10 @@ public class ItemServiceImpl implements ItemService {
         return itemMapper.getById(id);
     }
 
-    @Override
-    public List<ItemEntity> list(LambdaQueryWrapper<ItemEntity> wrapper) {
-        return itemMapper.list(wrapper);
-    }
 
     @Override
     public List<ItemEntity> listActiveItems() {
-        LambdaQueryWrapper<ItemEntity> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(ItemEntity::getStatus, 1)
-                .orderByDesc(ItemEntity::getCreateTime);
-        return itemMapper.list(wrapper);
+        return itemMapper.list(w -> w.eq(ItemEntity::getStatus, 1).orderByDesc(ItemEntity::getCreateTime));
     }
 
     @Override

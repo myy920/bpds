@@ -1,12 +1,24 @@
 package com.myy.bpds.common.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.type.AnnotationMetadata;
 
 
-@Configuration
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
+@Import(CommonEnableConfig.CommonModuleRegistrar.class)
 public class CommonEnableConfig {
-    // 这个类作为 common 模块配置的总开关
-    // 其他配置类通过 @ConditionalOnBean(CommonEnableConfig.class) 依赖此类的存在
+
+    public static class CommonModuleRegistrar implements ImportBeanDefinitionRegistrar {
+        @Override
+        public void registerBeanDefinitions(@NotNull AnnotationMetadata importingClassMetadata,
+                                            @NotNull BeanDefinitionRegistry registry) {
+            ClassPathBeanDefinitionScanner scanner = new ClassPathBeanDefinitionScanner(registry);
+            scanner.scan("com.myy.bpds.common");
+        }
+    }
 }

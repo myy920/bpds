@@ -20,6 +20,20 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
     Logger log = LoggerFactory.getLogger(LambdaBaseMapper.class);
 
     /**
+     * 查询单条记录（BaseMapper 原始方法名）
+     */
+    default T selectOne(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return getOne(wrapperSetting, false);
+    }
+
+    /**
+     * 查询单条记录（BaseMapper 原始方法名，带异常控制）
+     */
+    default T selectOne(Consumer<LambdaQueryWrapper<T>> wrapperSetting, boolean throwEx) {
+        return getOne(wrapperSetting, throwEx);
+    }
+
+    /**
      * 查询单条记录
      */
     default T getOne(Consumer<LambdaQueryWrapper<T>> wrapperSetting, boolean throwEx) {
@@ -67,6 +81,15 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
         List<Object> objs = this.getBaseMapper().selectObjs(wrapper);
         return SqlHelper.getObject((org.apache.ibatis.logging.Log) log,
                 objs.stream().map(mapper).collect(Collectors.toList()));
+    }
+
+    /**
+     * 删除记录（BaseMapper 原始方法名）
+     */
+    default int delete(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
+        wrapperSetting.accept(wrapper);
+        return this.getBaseMapper().delete(wrapper);
     }
 
     /**
@@ -120,12 +143,28 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
     }
 
     /**
+     * 统计数量（BaseMapper 原始方法名）
+     */
+    default Long selectCount(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
+        wrapperSetting.accept(wrapper);
+        return this.getBaseMapper().selectCount(wrapper);
+    }
+
+    /**
      * 统计数量
      */
     default long count(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
         LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
         wrapperSetting.accept(wrapper);
         return SqlHelper.retCount(this.getBaseMapper().selectCount(wrapper));
+    }
+
+    /**
+     * 查询列表（BaseMapper 原始方法名）
+     */
+    default List<T> selectList(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return list(wrapperSetting);
     }
 
     /**
@@ -138,12 +177,26 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
     }
 
     /**
+     * 分页查询列表（BaseMapper 原始方法名）
+     */
+    default List<T> selectList(IPage<T> page, Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return list(page, wrapperSetting);
+    }
+
+    /**
      * 分页查询列表
      */
     default List<T> list(IPage<T> page, Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
         LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
         wrapperSetting.accept(wrapper);
         return this.getBaseMapper().selectList(page, wrapper);
+    }
+
+    /**
+     * 分页查询（BaseMapper 原始方法名）
+     */
+    default <E extends IPage<T>> E selectPage(E page, Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return page(page, wrapperSetting);
     }
 
     /**
@@ -156,12 +209,26 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
     }
 
     /**
+     * 查询 Map 列表（BaseMapper 原始方法名）
+     */
+    default List<Map<String, Object>> selectMaps(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return listMaps(wrapperSetting);
+    }
+
+    /**
      * 查询 Map 列表
      */
     default List<Map<String, Object>> listMaps(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
         LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
         wrapperSetting.accept(wrapper);
         return this.getBaseMapper().selectMaps(wrapper);
+    }
+
+    /**
+     * 分页查询 Map 列表（BaseMapper 原始方法名）
+     */
+    default <E extends IPage<Map<String, Object>>> E selectMapsPage(E page, Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return pageMaps(page, wrapperSetting);
     }
 
     /**
@@ -172,6 +239,13 @@ public interface LambdaBaseMapper<T> extends MybatisPlus3IServiceAdapter<T> {
         LambdaQueryWrapper<T> wrapper = Wrappers.lambdaQuery();
         wrapperSetting.accept(wrapper);
         return this.getBaseMapper().selectMaps(page, wrapper);
+    }
+
+    /**
+     * 查询对象列表（BaseMapper 原始方法名）
+     */
+    default <E> List<E> selectObjs(Consumer<LambdaQueryWrapper<T>> wrapperSetting) {
+        return listObjs(wrapperSetting);
     }
 
     /**

@@ -15,6 +15,7 @@ public enum ItemErrorCode implements ErrorCode {
     ITEM_CREATE_FAILED(50203, "商品创建失败"),
     ITEM_UPDATE_FAILED(50204, "商品更新失败"),
     ITEM_DELETE_FAILED(50205, "商品删除失败"),
+    ITEM_NAME_DUPLICATE(50206, "商品名称已存在"),
     ;
 
     private final Integer code;

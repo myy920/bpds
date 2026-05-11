@@ -1,0 +1,39 @@
+server:
+  port: 8004
+  servlet:
+    context-path: /${spring.application.name}
+
+spring:
+  application:
+    name: user-service
+
+  profiles:
+    active: dev
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.11.130:3306/bpds?serverTimezone=Asia/Shanghai&characterEncoding=utf-8&allowMultiQueries=true
+    username: root
+    password: Root*123
+
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+      pool-name: BPDS_USER_POOL
+      auto-commit: true
+      leak-detection-threshold: 60000
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.11.130:8848
+        username: nacos
+        password: nacos
+
+logging:
+  level:
+    com.myy.bpds: debug
