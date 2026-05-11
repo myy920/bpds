@@ -43,12 +43,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectEntity> selectAll() {
-        return projectMapper.selectList(null);
+        return projectMapper.selectList(ew -> {
+        });
     }
 
     @Override
     public PageResult<ProjectEntity> page(PageQuery pageQuery) {
-        return PageResult.of(projectMapper.page(pageQuery.toMpPage(), ew -> {}));
+        return PageResult.of(projectMapper.page(pageQuery.toMpPage(), ew -> {
+        }));
     }
 
     @Override
