@@ -53,4 +53,9 @@ public interface ItemService {
      * 根据ID列表查询商品
      */
     List<ItemEntity> listByIds(List<String> ids);
+
+    /**
+     * 扣减库存
+     */
+    void deductStock(String itemId, Integer quantity);
 }

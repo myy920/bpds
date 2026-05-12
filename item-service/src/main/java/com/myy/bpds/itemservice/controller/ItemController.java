@@ -71,4 +71,13 @@ public class ItemController {
         List<ItemEntity> items = itemService.listActiveItems();
         return Result.ok(items);
     }
+
+    /**
+     * 扣减库存
+     */
+    @PostMapping("/deduct-stock")
+    public Result<Void> deductStock(@RequestParam String itemId, @RequestParam Integer quantity) {
+        itemService.deductStock(itemId, quantity);
+        return Result.ok();
+    }
 }

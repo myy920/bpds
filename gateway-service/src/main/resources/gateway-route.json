@@ -102,5 +102,31 @@
         }
       }
     ]
+  },
+  {
+    "id": "order-service",
+    "uri": "lb://order-service",
+    "predicates": [
+      {
+        "name": "Path",
+        "args": {
+          "pattern": "/gateway-service/order/**"
+        }
+      }
+    ],
+    "filters": [
+      {
+        "name": "StripPrefix",
+        "args": {
+          "parts": "1"
+        }
+      },
+      {
+        "name": "PrefixPath",
+        "args": {
+          "prefix": "/order-service"
+        }
+      }
+    ]
   }
 ]

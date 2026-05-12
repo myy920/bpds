@@ -50,6 +50,7 @@ public class DynamicRouteLoader {
     }
 
     public void updateRoute(String configInfo) {
+        log.info("更新路由配置: {}", configInfo);
         try {
             List<RouteDefinition> routeDefinitions = objectMapper.readValue(configInfo, new TypeReference<>() {
             });

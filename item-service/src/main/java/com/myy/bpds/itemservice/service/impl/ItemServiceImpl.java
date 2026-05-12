@@ -6,6 +6,7 @@ import com.myy.bpds.itemservice.dao.ItemDao;
 import com.myy.bpds.itemservice.entity.ItemEntity;
 import com.myy.bpds.itemservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -78,6 +79,24 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemEntity> listByIds(List<String> ids) {
-        return itemDao.listByIds(ids);
+        return ListUtils.emptyIfNull(itemDao.listByIds(ids));
+    }
+
+    @Override
+    public void deductStock(String itemId, Integer quantity) {
+        // 查询商品
+        ItemEntity item = itemDao.getById(itemId);
+        if (item == null) {
+            throw new BpdsException(ItemErrorCode.ITEM_NOT_EXIST);
+        }
+
+        // 检查库存
+        if (item.getStock() < quantity) {
+            throw new BpdsException(ItemErrorCode.ITEM_STOCK_INSUFFICIENT);
+        }
+
+        // 扣减库存
+        item.setStock(item.getStock() - quantity);
+        itemDao.updateById(item);
     }
 }

@@ -12,7 +12,7 @@ public enum UserErrorCode implements ErrorCode {
     // 用户业务错误码（50201-50299）
     USER_NOT_FOUND(50201, "用户不存在"),
     USER_ALREADY_EXISTS(50202, "用户已存在"),
-    PASSWORD_ERROR(50203, "账号或密码错误"),
+    USERNAME_OR_PASSWORD_ERROR(50203, "账号或密码错误"),
     USER_DISABLED(50204, "用户已被禁用"),
     USERNAME_OR_PASSWORD_EMPTY(50205, "账号和密码不能为空"),
     ;

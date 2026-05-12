@@ -2,8 +2,8 @@ package com.myy.bpds.cartservice.controller;
 
 import com.myy.bpds.cartservice.dto.CartDTO;
 import com.myy.bpds.cartservice.service.CartItemService;
+import com.myy.bpds.cartservice.service.CartService;
 import com.myy.bpds.common.dto.Result;
-import com.myy.bpds.common.utils.BpdsContextHolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/cart")
 @RequiredArgsConstructor
 public class CartController {
+    private final CartService cartService;
 
     private final CartItemService cartItemService;
 
@@ -25,8 +26,7 @@ public class CartController {
     public Result<Void> addToCart(
             @RequestParam String itemId,
             @RequestParam(defaultValue = "1") Integer quantity) {
-        String userId = BpdsContextHolder.currentUserId();
-        cartItemService.addToCart(userId, itemId, quantity);
+        cartItemService.addToCart(itemId, quantity);
         return Result.ok();
     }
 
@@ -35,8 +35,15 @@ public class CartController {
      */
     @GetMapping("/info")
     public Result<CartDTO> getCartInfo() {
-        String userId = BpdsContextHolder.currentUserId();
-        CartDTO cartInfo = cartItemService.getCartByUserId(userId);
-        return Result.ok(cartInfo);
+        return Result.ok(cartService.queryUserCartDetails());
+    }
+
+    /**
+     * 清空购物车
+     */
+    @PostMapping("/clear")
+    public Result<Void> clearCart() {
+        cartService.clearCart();
+        return Result.ok();
     }
 }

@@ -36,12 +36,12 @@ public class UserServiceImpl implements UserService {
         // 1. 查询用户
         UserEntity user = userDao.getOne(w -> w.eq(UserEntity::getUsername, request.getUsername()));
         if (user == null) {
-            throw new BpdsException(UserErrorCode.USER_NOT_FOUND);
+            throw new BpdsException(UserErrorCode.USERNAME_OR_PASSWORD_ERROR);
         }
         // 2. 验证密码
         String encryptedPassword = encryptPassword(request.getPassword());
         if (!user.getPassword().equals(encryptedPassword)) {
-            throw new BpdsException(UserErrorCode.PASSWORD_ERROR);
+            throw new BpdsException(UserErrorCode.USERNAME_OR_PASSWORD_ERROR);
         }
         // 3. 检查用户状态
         if (user.getStatus() != null && user.getStatus() == 0) {
