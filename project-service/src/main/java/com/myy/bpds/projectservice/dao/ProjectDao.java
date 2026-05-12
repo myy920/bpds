@@ -1,6 +1,6 @@
 package com.myy.bpds.projectservice.dao;
 
-import com.myy.bpds.common.mapper.LambdaBaseMapper;
+import com.myy.bpds.common.mybatisplus.LambdaBaseMapper;
 import com.myy.bpds.projectservice.entity.ProjectEntity;
 
 /**

@@ -85,6 +85,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deductStock(String itemId, Integer quantity) {
         // 查询商品
         ItemEntity item = itemDao.getById(itemId);
@@ -125,5 +126,13 @@ public class ItemServiceImpl implements ItemService {
             item.setStock(item.getStock() - request.getQuantity());
             itemDao.updateById(item);
         }
+    }
+
+    @Override
+    @Transactional
+    public void autoReplenishStock() {
+        List<ItemEntity> items = itemDao.list();
+        items.forEach(item -> item.setStock(item.getStock() + 20));
+        itemDao.updateBatchById(items);
     }
 }

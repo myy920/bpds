@@ -1,11 +1,16 @@
 package com.myy.bpds.cartservice.controller;
 
+import com.myy.bpds.cartservice.dto.AddCartItemDTO;
 import com.myy.bpds.cartservice.dto.CartDTO;
 import com.myy.bpds.cartservice.service.CartItemService;
 import com.myy.bpds.cartservice.service.CartService;
 import com.myy.bpds.common.dto.Result;
 import lombok.RequiredArgsConstructor;
+import org.apache.seata.rm.datasource.DataSourceProxy;
+import org.apache.seata.rm.datasource.xa.DataSourceProxyXA;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 购物车Controller
@@ -31,10 +36,24 @@ public class CartController {
     }
 
     /**
+     * 批量添加商品到购物车
+     *
+     * @param addCartItems
+     * @return
+     */
+    @PostMapping("/batchAdd")
+    public Result<Void> batchAddToCart(@RequestBody List<AddCartItemDTO> addCartItems) {
+        cartItemService.batchAddToCart(addCartItems);
+        return Result.ok();
+    }
+
+    /**
      * 查询用户完整购物车信息（包含购物车和购物车项列表）
      */
     @GetMapping("/info")
     public Result<CartDTO> getCartInfo() {
+        DataSourceProxy at;
+        DataSourceProxyXA XA;
         return Result.ok(cartService.queryUserCartDetails());
     }
 

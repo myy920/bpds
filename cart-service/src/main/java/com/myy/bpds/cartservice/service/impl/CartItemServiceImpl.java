@@ -1,25 +1,19 @@
 package com.myy.bpds.cartservice.service.impl;
 
-import com.myy.bpds.cartservice.client.ItemClient;
-import com.myy.bpds.cartservice.constants.CartErrorCode;
 import com.myy.bpds.cartservice.dao.CartItemDao;
-import com.myy.bpds.cartservice.dto.CartDTO;
-import com.myy.bpds.cartservice.dto.CartItemDTO;
+import com.myy.bpds.cartservice.dto.AddCartItemDTO;
 import com.myy.bpds.cartservice.entity.CartEntity;
 import com.myy.bpds.cartservice.entity.CartItemEntity;
 import com.myy.bpds.cartservice.service.CartItemService;
 import com.myy.bpds.cartservice.service.CartService;
-import com.myy.bpds.common.exception.BpdsException;
 import com.myy.bpds.common.utils.BpdsContextHolder;
-import com.myy.bpds.itemservice.entity.ItemEntity;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -54,5 +48,29 @@ public class CartItemServiceImpl implements CartItemService {
             cartItem.setSelected(1);
             cartItemDao.save(cartItem);
         }
+    }
+
+    @Override
+    @Transactional
+    public void batchAddToCart(List<AddCartItemDTO> addCartItems) {
+        String userId = BpdsContextHolder.currentUserId();
+        CartEntity cart = cartService.getOrCreateCart(userId);
+        List<CartItemEntity> dbCartItems = cartItemDao.list(ew -> ew.eq(CartItemEntity::getCartId, cart.getId()));
+        Map<String, CartItemEntity> dbCartItemMap = ListUtils.emptyIfNull(dbCartItems).stream()
+                .collect(Collectors.toMap(CartItemEntity::getItemId, a -> a, (v1, v2) -> v1));
+        List<CartItemEntity> insertOrUpdates = addCartItems.stream().map(add -> {
+            CartItemEntity db = dbCartItemMap.get(add.getItemId());
+            if (db == null) {
+                db = new CartItemEntity();
+                db.setCartId(cart.getId());
+                db.setItemId(add.getItemId());
+                db.setQuantity(add.getQuantity());
+                db.setSelected(1);
+            } else {
+                db.setQuantity(db.getQuantity() + add.getQuantity());
+            }
+            return db;
+        }).toList();
+        cartItemDao.saveOrUpdateBatch(insertOrUpdates);
     }
 }

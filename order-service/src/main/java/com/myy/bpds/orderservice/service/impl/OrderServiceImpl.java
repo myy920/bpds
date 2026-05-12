@@ -2,6 +2,9 @@ package com.myy.bpds.orderservice.service.impl;
 
 import com.myy.bpds.cartservice.dto.CartDTO;
 import com.myy.bpds.cartservice.dto.CartItemDTO;
+import com.myy.bpds.common.dto.PageQuery;
+import com.myy.bpds.common.dto.PageResult;
+import com.myy.bpds.common.dto.Result;
 import com.myy.bpds.common.exception.BpdsException;
 import com.myy.bpds.common.utils.BpdsContextHolder;
 import com.myy.bpds.itemservice.dto.StockDeductionRequest;
@@ -19,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.seata.spring.annotation.GlobalTransactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -40,7 +44,7 @@ public class OrderServiceImpl implements OrderService {
     private final ItemClient itemClient;
 
     @Override
-    // @GlobalTransactional(name = "create-order-tx")
+    @GlobalTransactional(name = "create-order-tx")
     public OrderResponse createOrder(CreateOrderRequest request) {
         // 查询购物车信息
         CartDTO cartDTO = cartClient.getCartInfo().getData();
@@ -56,11 +60,12 @@ public class OrderServiceImpl implements OrderService {
         // 创建订单
         OrderEntity order = createOrder(request, cartItems);
 
-        // 扣减库存
-        deductStock(cartItems);
-
         // 清空购物车
-        cartClient.clearCart();
+        remoteClearCart();
+
+        // 扣减库存
+        remoteDeductStock(cartItems);
+
 
         // 返回订单信息
         OrderResponse response = new OrderResponse();
@@ -103,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    private void deductStock(List<CartItemDTO> cartItems) {
+    private void remoteDeductStock(List<CartItemDTO> cartItems) {
         // 准备批量扣减库存请求
         List<StockDeductionRequest> stockRequests = new ArrayList<>();
         for (CartItemDTO cartItem : cartItems) {
@@ -114,9 +119,18 @@ public class OrderServiceImpl implements OrderService {
         }
         // 批量扣减库存
         if (CollectionUtils.isNotEmpty(stockRequests)) {
-            itemClient.batchDeductStock(stockRequests);
+            Result<Void> result = itemClient.batchDeductStock(stockRequests);
+            if (result.isError()) {
+                throw new BpdsException(result.getCode(), result.getMessage());
+            }
         }
+    }
 
+    private void remoteClearCart() {
+        Result<Void> result = cartClient.clearCart();
+        if (result.isError()) {
+            throw new BpdsException(result.getCode(), result.getMessage());
+        }
     }
 
     /**
@@ -126,5 +140,10 @@ public class OrderServiceImpl implements OrderService {
         String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         int random = (int) (Math.random() * 900000) + 100000;
         return "ORD" + timestamp + random;
+    }
+
+    @Override
+    public PageResult<OrderEntity> pageOrders(PageQuery pageQuery) {
+        return PageResult.of(orderDao.page(pageQuery.toMpPage()));
     }
 }

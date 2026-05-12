@@ -4,6 +4,8 @@ import com.myy.bpds.common.constants.BasicErrorCode;
 import com.myy.bpds.common.constants.ErrorCode;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * 统一响应结果类
  */
@@ -18,6 +20,10 @@ public class Result<T> {
         this.code = code;
         this.message = message;
         this.data = data;
+    }
+
+    public boolean isError() {
+        return !Objects.equals(code, BasicErrorCode.SUCCESS.getCode());
     }
 
     /**

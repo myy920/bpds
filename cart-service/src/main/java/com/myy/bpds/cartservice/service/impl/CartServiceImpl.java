@@ -54,7 +54,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartDTO queryUserCartDetails() {
         String userId = BpdsContextHolder.currentUserId();
-        CartEntity cart = thatFactory.getObject().getOrCreateCart(userId);
+        CartEntity cart = getOrCreateCart(userId);
         List<CartItemEntity> cartItems = cartItemDao.list(ew -> ew.eq(CartItemEntity::getCartId, cart.getId()));
         List<String> itemIds = cartItems.stream().map(CartItemEntity::getItemId).toList();
         List<ItemEntity> items = List.of();

@@ -71,6 +71,8 @@ spring:
       http-method-specify: true
 
 seata:
+  enable: true
+  enable-auto-data-source-proxy: true
   registry:
     type: nacos
     nacos:
@@ -83,7 +85,7 @@ seata:
   service:
     vgroup-mapping:
       bpds: "default"
-  data-source-proxy-mode: XA
+  data-source-proxy-mode: AT
 
 
 # MyBatis-Plus 配置

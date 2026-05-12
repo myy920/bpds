@@ -64,4 +64,6 @@ public interface ItemService {
      * 批量扣减库存
      */
     void batchDeductStock(List<StockDeductionRequest> requests);
+
+    void autoReplenishStock();
 }

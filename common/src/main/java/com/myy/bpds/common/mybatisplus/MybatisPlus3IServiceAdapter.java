@@ -1,4 +1,4 @@
-package com.myy.bpds.common.mapper;
+package com.myy.bpds.common.mybatisplus;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;

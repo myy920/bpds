@@ -7,4 +7,8 @@ public interface ErrorCode {
     Integer getCode();
 
     String getMessage();
+
+    default boolean isError() {
+        return getCode() != 200;
+    }
 }

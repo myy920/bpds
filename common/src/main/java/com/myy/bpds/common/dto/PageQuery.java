@@ -21,14 +21,14 @@ public class PageQuery {
      */
     @NotNull(message = "pageNum 不能为空")
     @Min(value = 1, message = "pageNum 从1开始")
-    private Integer pageNum;
+    private Integer pageNum = 1;
 
     /**
      * 每页大小
      */
     @NotNull(message = "pageSize 不能为空")
     @Min(value = 1, message = "pageSize 必须大于0")
-    private Integer pageSize;
+    private Integer pageSize = 10;
 
     /**
      * 排序规则列表

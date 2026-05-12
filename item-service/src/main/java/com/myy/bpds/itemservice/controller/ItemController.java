@@ -96,4 +96,13 @@ public class ItemController {
         itemService.batchDeductStock(requests);
         return Result.ok();
     }
+
+    /**
+     * 自动补货
+     */
+    @PostMapping("/auto-replenish-stock")
+    public Result<Void> replenishStock() {
+        itemService.autoReplenishStock();
+        return Result.ok();
+    }
 }
