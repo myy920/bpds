@@ -1,6 +1,7 @@
 package com.myy.bpds.itemservice.controller;
 
 import com.myy.bpds.common.dto.Result;
+import com.myy.bpds.itemservice.dto.StockDeductionRequest;
 import com.myy.bpds.itemservice.entity.ItemEntity;
 import com.myy.bpds.itemservice.service.ItemService;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +79,21 @@ public class ItemController {
     @PostMapping("/deduct-stock")
     public Result<Void> deductStock(@RequestParam String itemId, @RequestParam Integer quantity) {
         itemService.deductStock(itemId, quantity);
+        return Result.ok();
+    }
+
+    // 查询商品信息
+    @GetMapping("")
+    public Result<List<ItemEntity>> getItems(@RequestParam List<String> ids) {
+        return Result.ok(itemService.listByIds(ids));
+    }
+
+    /**
+     * 批量扣减库存
+     */
+    @PostMapping("/batch-deduct-stock")
+    public Result<Void> batchDeductStock(@RequestBody List<StockDeductionRequest> requests) {
+        itemService.batchDeductStock(requests);
         return Result.ok();
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @FeignClient(value = "item-service", fallbackFactory = ItemClient.ItemClientFallbackFactory.class)
 public interface ItemClient {
 
-    @GetMapping("/item-service/api/item")
+    @GetMapping("/item-service/item")
     Result<List<ItemEntity>> getItem(@RequestParam List<String> ids);
 
     @Component

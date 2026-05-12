@@ -1,5 +1,6 @@
 package com.myy.bpds.itemservice.service;
 
+import com.myy.bpds.itemservice.dto.StockDeductionRequest;
 import com.myy.bpds.itemservice.entity.ItemEntity;
 
 import java.io.Serializable;
@@ -58,4 +59,9 @@ public interface ItemService {
      * 扣减库存
      */
     void deductStock(String itemId, Integer quantity);
+
+    /**
+     * 批量扣减库存
+     */
+    void batchDeductStock(List<StockDeductionRequest> requests);
 }
