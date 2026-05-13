@@ -7,11 +7,14 @@ import com.myy.bpds.orderservice.dto.CreateOrderRequest;
 import com.myy.bpds.orderservice.dto.OrderResponse;
 import com.myy.bpds.orderservice.entity.OrderEntity;
 import com.myy.bpds.orderservice.service.OrderService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.DispatcherServlet;
 
 /**
  * 订单Controller
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/order")
 @RequiredArgsConstructor
+@Validated
 public class OrderController {
 
     private final OrderService orderService;
@@ -38,7 +42,7 @@ public class OrderController {
      * @return
      */
     @PostMapping("/page")
-    public Result<PageResult<OrderEntity>> pageOrders(@RequestBody PageQuery pageQuery) {
+    public Result<PageResult<OrderEntity>> pageOrders(@Valid @RequestBody PageQuery pageQuery) {
         return Result.ok(orderService.pageOrders(pageQuery));
     }
 }

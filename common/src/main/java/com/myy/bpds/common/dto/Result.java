@@ -22,7 +22,7 @@ public class Result<T> {
         this.data = data;
     }
 
-    public boolean isError() {
+    public boolean hasError() {
         return !Objects.equals(code, BasicErrorCode.SUCCESS.getCode());
     }
 

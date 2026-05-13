@@ -120,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
         // 批量扣减库存
         if (CollectionUtils.isNotEmpty(stockRequests)) {
             Result<Void> result = itemClient.batchDeductStock(stockRequests);
-            if (result.isError()) {
+            if (result.hasError()) {
                 throw new BpdsException(result.getCode(), result.getMessage());
             }
         }
@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void remoteClearCart() {
         Result<Void> result = cartClient.clearCart();
-        if (result.isError()) {
+        if (result.hasError()) {
             throw new BpdsException(result.getCode(), result.getMessage());
         }
     }

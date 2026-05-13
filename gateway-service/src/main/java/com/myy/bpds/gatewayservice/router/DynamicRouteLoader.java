@@ -30,7 +30,7 @@ public class DynamicRouteLoader {
     private static final String DATA_ID = "gateway-route.json";
     private static final String GROUP = "DEFAULT_GROUP";
 
-    private Set<String> routeIds = new HashSet<>();
+    private final Set<String> routeIds = new HashSet<>();
 
     @PostConstruct
     public void init() throws NacosException {
@@ -50,7 +50,7 @@ public class DynamicRouteLoader {
     }
 
     public void updateRoute(String configInfo) {
-        log.info("更新路由配置: {}", configInfo);
+        log.info("更新路由配置: \n{}", configInfo);
         try {
             List<RouteDefinition> routeDefinitions = objectMapper.readValue(configInfo, new TypeReference<>() {
             });
