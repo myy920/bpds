@@ -49,22 +49,19 @@ public class JwtAuthGlobalFilter implements GlobalFilter, Ordered {
         }
 
         // 3. 验证 Token
-        boolean isValid = StringUtils.isNotBlank(token);
         UserInfo userInfo = null;
-        if (isValid) {
+        if (StringUtils.isNotBlank(token)) {
             try {
                 userInfo = JwtUtils.claimsToUserInfo(JwtUtils.parseToken(token));
             } catch (Exception ignore) {
-                isValid = false;
             }
         }
-        if (!isValid) {
-            log.warn("Token 无效或已过期: {}", path);
+        if (userInfo == null) {
+            log.warn("{} 无效或已过期: {}", RequestHeaders.AUTHORIZATION, path);
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return response.setComplete();
         }
-
 
         // 4. 将用户信息传递到下游服务
         String userInfoJson = String.format("{\"userId\":\"%s\",\"username\":\"%s\"}",

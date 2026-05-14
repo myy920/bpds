@@ -18,7 +18,7 @@
 
     <!-- 其他所有环境（test、prod、uat等） -->
     <springProfile name="!dev">
-        <property name="LOG_PATH" value="/data/logs/${APP_NAME}"/>
+        <property name="LOG_PATH" value="/opt/data/logs/${APP_NAME}"/>
     </springProfile>
 
     <property name="LOG_FILE" value="${LOG_PATH}/run.log"/>
