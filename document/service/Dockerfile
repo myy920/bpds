@@ -12,5 +12,5 @@ EXPOSE 8080
 COPY *.jar app.jar
 
 # JVM 参数和启动命令
-ENV JAVA_OPTS="-Xms256m -Xmx512m -XX:+UseG1GC"
+ENV JAVA_OPTS="-Xms64m -Xmx256m -XX:+UseG1GC"
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

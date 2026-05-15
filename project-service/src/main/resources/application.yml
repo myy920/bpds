@@ -66,12 +66,13 @@ spring:
         namespace: ""
         group: DEFAULT_GROUP
     sentinel:
+      enabled: false
       transport:
         dashboard: 192.168.11.130:8858
       http-method-specify: true
 
 seata:
-  enable: true
+  enabled: false
   enable-auto-data-source-proxy: true
   registry:
     type: nacos
