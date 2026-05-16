@@ -1,3 +1,15 @@
+# 创建容器网络
+docker network create bpds
+
+# nginx
+docker run -d \
+  --name=nginx \
+  -p 80:80 \
+  -v /opt/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \
+  -v /opt/nginx/html:/usr/share/nginx/html \
+  --network bpds \
+  nginx
+
 #  mysql
 docker run -d \
   --name=mysql \
@@ -7,6 +19,7 @@ docker run -d \
   -v /opt/mysql/conf:/etc/mysql/conf.d \
   -v /opt/mysql/init:/docker-entrypoint-initdb.d \
   -v /opt/mysql/data:/var/lib/mysql \
+  --network bpds \
   mysql
 
 # redis
@@ -15,8 +28,8 @@ docker run -d \
   -p 6379:6379 \
   -v /opt/redis/redis.conf:/usr/local/etc/redis/redis.conf:ro \
   -v /opt/redis/data:/data \
-  redis \
-  redis-server /usr/local/etc/redis/redis.conf
+  --network bpds \
+  redis redis-server /usr/local/etc/redis/redis.conf
 
 # nacos
 docker run -d \
@@ -35,6 +48,7 @@ docker run -d \
   -e NACOS_AUTH_IDENTITY_KEY=nacos \
   -e NACOS_AUTH_IDENTITY_VALUE=nacos \
   -v /opt/nacos/init:/home/nacos/init.d \
+  --network bpds \
   nacos/nacos-server:v3.0.3
 
 # seata
@@ -42,7 +56,20 @@ docker run -d \
   --name=seata \
   -p 8091:8091 \
   -p 7091:7091 \
+  -e TZ=Asia/Shanghai \
+  -- network bpds \
   apache/seata-server:2.5.0
+
+# rabbitmq
+docker run -d \
+  --name=rabbitmq \
+  -p 5672:5672 \
+  -p 15672:15672 \
+  -e TZ=Asia/Shanghai \
+  -e RABBITMQ_DEFAULT_USER=rabbitmq \
+  -e RABBITMQ_DEFAULT_PASS=rabbitmq \
+  --network bpds \
+  rabbitmq:3-management
 
 
 
